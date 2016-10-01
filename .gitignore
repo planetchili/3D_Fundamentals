@@ -243,3 +243,10 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+#################
+# Chili Ignores #
+#################
+
+# Precompiled shader bytecode headers
+*.shh

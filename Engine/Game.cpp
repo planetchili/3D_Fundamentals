@@ -24,7 +24,8 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	cube( 1.0f )
 {
 }
 
@@ -39,13 +40,10 @@ void Game::Go()
 void Game::UpdateModel()
 {
 }
-#include "PubeScreenTransformer.h"
-#include "Cube.h"
+
 void Game::ComposeFrame()
 {
-	PubeScreenTransformer pst;
-	Cube c( 1.0f );
-	auto lines = c.GetLines();
+	auto lines = cube.GetLines();
 	for( auto& v : lines.vertices )
 	{
 		pst.Transform( v );

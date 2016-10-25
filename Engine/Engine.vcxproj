@@ -147,11 +147,13 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Mat2.h" />
+    <ClInclude Include="Mat3.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Vec2.h" />
+    <ClInclude Include="Vec3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp" />

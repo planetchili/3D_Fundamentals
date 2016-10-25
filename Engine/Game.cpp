@@ -40,13 +40,20 @@ void Game::UpdateModel()
 {
 }
 #include "PubeScreenTransformer.h"
+#include "Cube.h"
 void Game::ComposeFrame()
 {
 	PubeScreenTransformer pst;
-	Vec3 v0 = { 0.0f,0.5f,0.0f };
-	Vec3 v1 = { 0.5f,-0.5f,0.0f };
-	Vec3 v2 = { -0.5f,-0.5f,0.0f };
-	gfx.DrawLine( pst.GetTransformed( v0 ),pst.GetTransformed( v1 ),Colors::White );
-	gfx.DrawLine( pst.GetTransformed( v1 ),pst.GetTransformed( v2 ),Colors::White );
-	gfx.DrawLine( pst.GetTransformed( v2 ),pst.GetTransformed( v0 ),Colors::White );
+	Cube c( 1.0f );
+	auto lines = c.GetLines();
+	for( auto& v : lines.vertices )
+	{
+		pst.Transform( v );
+	}
+	for( auto i = lines.indices.cbegin(),
+		end = lines.indices.cend();
+		i != end; std::advance( i,2 ) )
+	{
+		gfx.DrawLine( lines.vertices[*i],lines.vertices[*std::next( i )],Colors::White );
+	}
 }

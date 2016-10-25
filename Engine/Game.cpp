@@ -39,10 +39,14 @@ void Game::Go()
 void Game::UpdateModel()
 {
 }
-#include "Mat3.h"
+#include "PubeScreenTransformer.h"
 void Game::ComposeFrame()
 {
-	Vec3 v( 1.0f,1.0f,1.0f );
-	Mat3 m = Mat3::Scaling( 3.0f );
-	v *= m;
+	PubeScreenTransformer pst;
+	Vec3 v0 = { 0.0f,0.5f,0.0f };
+	Vec3 v1 = { 0.5f,-0.5f,0.0f };
+	Vec3 v2 = { -0.5f,-0.5f,0.0f };
+	gfx.DrawLine( pst.GetTransformed( v0 ),pst.GetTransformed( v1 ),Colors::White );
+	gfx.DrawLine( pst.GetTransformed( v1 ),pst.GetTransformed( v2 ),Colors::White );
+	gfx.DrawLine( pst.GetTransformed( v2 ),pst.GetTransformed( v0 ),Colors::White );
 }

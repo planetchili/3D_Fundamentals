@@ -43,43 +43,37 @@ void Game::UpdateModel()
 	const float dt = 1.0f / 60.0f;
 	if( wnd.kbd.KeyIsPressed( 'Q' ) )
 	{
-		theta_x += dTheta * dt;
+		theta_x = wrap_angle( theta_x + dTheta * dt );
 	}
 	if( wnd.kbd.KeyIsPressed( 'W' ) )
 	{
-		theta_y += dTheta * dt;
+		theta_y = wrap_angle( theta_y + dTheta * dt );
 	}
 	if( wnd.kbd.KeyIsPressed( 'E' ) )
 	{
-		theta_z += dTheta * dt;
+		theta_z = wrap_angle( theta_z + dTheta * dt );
 	}
 	if( wnd.kbd.KeyIsPressed( 'A' ) )
 	{
-		theta_x -= dTheta * dt;
+		theta_x = wrap_angle( theta_x - dTheta * dt );
 	}
 	if( wnd.kbd.KeyIsPressed( 'S' ) )
 	{
-		theta_y -= dTheta * dt;
+		theta_y = wrap_angle( theta_y - dTheta * dt );
 	}
 	if( wnd.kbd.KeyIsPressed( 'D' ) )
 	{
-		theta_z -= dTheta * dt;
+		theta_z = wrap_angle( theta_z - dTheta * dt );
 	}
 }
 
 void Game::ComposeFrame()
 {
 	auto lines = cube.GetLines();
-	const Mat3 rot = 
-		!wnd.kbd.KeyIsPressed( VK_CONTROL )
-		?
-		(Mat3::RotationX( theta_x ) *
-		 Mat3::RotationY( theta_y ) *
-		 Mat3::RotationZ( theta_z )) 
-		:
-		(Mat3::RotationY( theta_y ) *
-		 Mat3::RotationZ( theta_z ) *
-		 Mat3::RotationX( theta_x ));
+	const Mat3 rot =
+		Mat3::RotationX( theta_x ) *
+		Mat3::RotationY( theta_y ) *
+		Mat3::RotationZ( theta_z );
 	for( auto& v : lines.vertices )
 	{
 		v *= rot;

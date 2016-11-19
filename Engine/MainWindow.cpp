@@ -20,15 +20,16 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Resource.h"
-#include "Graphics.h"
 #include "ChiliException.h"
 #include "Game.h"
 #include <assert.h>
 
-MainWindow::MainWindow( HINSTANCE hInst,wchar_t * pArgs )
+MainWindow::MainWindow( HINSTANCE hInst,wchar_t * pArgs,int width,int height )
 	:
 	args( pArgs ),
-	hInst( hInst )
+	hInst( hInst ),
+	width( width ),
+	height( height )
 {
 	// register window class
 	WNDCLASSEX wc = { sizeof( WNDCLASSEX ),CS_CLASSDC,_HandleMsgSetup,0,0,
@@ -42,9 +43,9 @@ MainWindow::MainWindow( HINSTANCE hInst,wchar_t * pArgs )
 	// create window & get hWnd
 	RECT wr;
 	wr.left = 350;
-	wr.right = Graphics::ScreenWidth + wr.left;
+	wr.right = width + wr.left;
 	wr.top = 100;
-	wr.bottom = Graphics::ScreenHeight + wr.top;
+	wr.bottom = height + wr.top;
 	AdjustWindowRect( &wr,WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,FALSE );
 	hWnd = CreateWindow( wndClassName,L"Chili DirectX Framework",
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
@@ -156,7 +157,7 @@ LRESULT MainWindow::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )
 	{
 		int x = LOWORD( lParam );
 		int y = HIWORD( lParam );
-		if( x > 0 && x < Graphics::ScreenWidth && y > 0 && y < Graphics::ScreenHeight )
+		if( x > 0 && x < width && y > 0 && y < height )
 		{
 			mouse.OnMouseMove( x,y );
 			if( !mouse.IsInWindow() )
@@ -170,9 +171,9 @@ LRESULT MainWindow::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )
 			if( wParam & (MK_LBUTTON | MK_RBUTTON) )
 			{
 				x = std::max( 0,x );
-				x = std::min( int( Graphics::ScreenWidth ) - 1,x );
+				x = std::min( width - 1,x );
 				y = std::max( 0,y );
-				y = std::min( int( Graphics::ScreenHeight ) - 1,y );
+				y = std::min( height - 1,y );
 				mouse.OnMouseMove( x,y );
 			}
 			else

@@ -51,7 +51,7 @@ private:
 		float u,v;			// texcoords
 	};
 public:
-	Graphics( class HWNDKey& key );
+	Graphics( class HWNDKey& key,int screenWidth,int screenHeight );
 	Graphics( const Graphics& ) = delete;
 	Graphics& operator=( const Graphics& ) = delete;
 	void EndFrame();
@@ -71,6 +71,8 @@ public:
 	}
 	~Graphics();
 private:
+	int screenWidth;
+	int screenHeight;
 	GDIPlusManager										gdipMan;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
 	Microsoft::WRL::ComPtr<ID3D11Device>				pDevice;
@@ -85,7 +87,4 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState>			pSamplerState;
 	D3D11_MAPPED_SUBRESOURCE							mappedSysBufferTexture;
 	Surface												sysBuffer;
-public:
-	static constexpr unsigned int ScreenWidth = 800u;
-	static constexpr unsigned int ScreenHeight = 600u;
 };

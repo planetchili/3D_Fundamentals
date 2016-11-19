@@ -21,10 +21,10 @@
 #include "MainWindow.h"
 #include "Game.h"
 
-Game::Game( MainWindow& wnd )
+Game::Game( MainWindow& wnd,int width,int height )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd,width,height )
 {
 }
 

@@ -65,6 +65,14 @@ void Game::UpdateModel()
 	{
 		theta_z = wrap_angle( theta_z - dTheta * dt );
 	}
+	if( wnd.kbd.KeyIsPressed( 'R' ) )
+	{
+		offset_z += 2.0f * dt;
+	}
+	if( wnd.kbd.KeyIsPressed( 'F' ) )
+	{
+		offset_z -= 2.0f * dt;
+	}
 }
 
 void Game::ComposeFrame()
@@ -77,7 +85,7 @@ void Game::ComposeFrame()
 	for( auto& v : lines.vertices )
 	{
 		v *= rot;
-		v += { 0.0f,0.0f,2.0f };
+		v += { 0.0f,0.0f,offset_z };
 		pst.Transform( v );
 	}
 	for( auto i = lines.indices.cbegin(),

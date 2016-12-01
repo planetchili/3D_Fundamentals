@@ -24,12 +24,14 @@
 
 int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR pArgs,INT )
 {
+	const int screenWidth = 600;
+	const int screenHeight = 600;
 	try
 	{
-		MainWindow wnd( hInst,pArgs );		
+		MainWindow wnd( hInst,pArgs,screenHeight,screenWidth );
 		try
 		{
-			Game theGame( wnd );
+			Game theGame( wnd,screenHeight,screenWidth );
 			while( wnd.ProcessMessage() )
 			{
 				theGame.Go();

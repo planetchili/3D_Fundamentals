@@ -39,9 +39,11 @@ namespace FramebufferShaders
 
 using Microsoft::WRL::ComPtr;
 
-Graphics::Graphics( HWNDKey& key )
+Graphics::Graphics( HWNDKey& key,int screenWidth,int screenHeight )
 	:
-	sysBuffer( ScreenWidth,ScreenHeight )
+	screenWidth(screenWidth),
+	screenHeight(screenHeight),
+	sysBuffer( screenWidth,screenHeight )
 {
 	assert( key.hWnd != nullptr );
 
@@ -49,8 +51,8 @@ Graphics::Graphics( HWNDKey& key )
 	// create device and swap chain/get render target view
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferCount = 1;
-	sd.BufferDesc.Width = Graphics::ScreenWidth;
-	sd.BufferDesc.Height = Graphics::ScreenHeight;
+	sd.BufferDesc.Width = screenWidth;
+	sd.BufferDesc.Height = screenHeight;
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	sd.BufferDesc.RefreshRate.Numerator = 1;
 	sd.BufferDesc.RefreshRate.Denominator = 60;
@@ -115,8 +117,8 @@ Graphics::Graphics( HWNDKey& key )
 
 	// set viewport dimensions
 	D3D11_VIEWPORT vp;
-	vp.Width = float( Graphics::ScreenWidth );
-	vp.Height = float( Graphics::ScreenHeight );
+	vp.Width = float( screenWidth );
+	vp.Height = float( screenHeight );
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;
@@ -127,8 +129,8 @@ Graphics::Graphics( HWNDKey& key )
 	///////////////////////////////////////
 	// create texture for cpu render target
 	D3D11_TEXTURE2D_DESC sysTexDesc;
-	sysTexDesc.Width = Graphics::ScreenWidth;
-	sysTexDesc.Height = Graphics::ScreenHeight;
+	sysTexDesc.Width = screenWidth;
+	sysTexDesc.Height = screenHeight;
 	sysTexDesc.MipLevels = 1;
 	sysTexDesc.ArraySize = 1;
 	sysTexDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;

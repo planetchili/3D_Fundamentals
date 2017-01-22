@@ -1,5 +1,5 @@
 /******************************************************************************************
-*	Chili DirectX Framework Version 16.10.01											  *
+*	Chili DirectX Framework Version 16.07.20											  *
 *	MainWindow.cpp																		  *
 *	Copyright 2016 PlanetChili.net <http://www.planetchili.net>							  *
 *																						  *
@@ -47,15 +47,15 @@ MainWindow::MainWindow( HINSTANCE hInst,wchar_t * pArgs )
 	wr.bottom = Graphics::ScreenHeight + wr.top;
 	AdjustWindowRect( &wr,WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,FALSE );
 	hWnd = CreateWindow( wndClassName,L"Chili DirectX Framework",
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
-		wr.left,wr.top,wr.right - wr.left,wr.bottom - wr.top,
-		nullptr,nullptr,hInst,this );
+						 WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
+						 wr.left,wr.top,wr.right - wr.left,wr.bottom - wr.top,
+						 nullptr,nullptr,hInst,this );
 
 	// throw exception if something went terribly wrong
 	if( hWnd == nullptr )
 	{
 		throw Exception( _CRT_WIDE( __FILE__ ),__LINE__,
-			L"Failed to get valid window handle." );
+						 L"Failed to get valid window handle." );
 	}
 
 	// show and update
@@ -105,14 +105,14 @@ LRESULT WINAPI MainWindow::_HandleMsgSetup( HWND hWnd,UINT msg,WPARAM wParam,LPA
 	if( msg == WM_NCCREATE )
 	{
 		// extract ptr to window class from creation data
-		const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>( lParam );
-		MainWindow* const pWnd = reinterpret_cast<MainWindow*>( pCreate->lpCreateParams );
+		const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
+		MainWindow* const pWnd = reinterpret_cast<MainWindow*>(pCreate->lpCreateParams);
 		// sanity check
 		assert( pWnd != nullptr );
 		// set WinAPI-managed user data to store ptr to window class
-		SetWindowLongPtr( hWnd,GWLP_USERDATA,reinterpret_cast<LONG_PTR>( pWnd ) );
+		SetWindowLongPtr( hWnd,GWLP_USERDATA,reinterpret_cast<LONG_PTR>(pWnd) );
 		// set message proc to normal (non-setup) handler now that setup is finished
-		SetWindowLongPtr( hWnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>( &MainWindow::_HandleMsgThunk ) );
+		SetWindowLongPtr( hWnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(&MainWindow::_HandleMsgThunk) );
 		// forward message to window class handler
 		return pWnd->HandleMsg( hWnd,msg,wParam,lParam );
 	}
@@ -123,7 +123,7 @@ LRESULT WINAPI MainWindow::_HandleMsgSetup( HWND hWnd,UINT msg,WPARAM wParam,LPA
 LRESULT WINAPI MainWindow::_HandleMsgThunk( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )
 {
 	// retrieve ptr to window class
-	MainWindow* const pWnd = reinterpret_cast<MainWindow*>( GetWindowLongPtr( hWnd,GWLP_USERDATA ) );
+	MainWindow* const pWnd = reinterpret_cast<MainWindow*>(GetWindowLongPtr( hWnd,GWLP_USERDATA ));
 	// forward message to window class handler
 	return pWnd->HandleMsg( hWnd,msg,wParam,lParam );
 }
@@ -154,11 +154,10 @@ LRESULT MainWindow::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )
 		// ************ MOUSE MESSAGES ************ //
 	case WM_MOUSEMOVE:
 	{
-		int x = LOWORD( lParam );
-		int y = HIWORD( lParam );
-		if( x > 0 && x < Graphics::ScreenWidth && y > 0 && y < Graphics::ScreenHeight )
+		POINTS pt = MAKEPOINTS( lParam );
+		if( pt.x > 0 && pt.x < Graphics::ScreenWidth && pt.y > 0 && pt.y < Graphics::ScreenHeight )
 		{
-			mouse.OnMouseMove( x,y );
+			mouse.OnMouseMove( pt.x,pt.y );
 			if( !mouse.IsInWindow() )
 			{
 				SetCapture( hWnd );
@@ -169,61 +168,56 @@ LRESULT MainWindow::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam )
 		{
 			if( wParam & (MK_LBUTTON | MK_RBUTTON) )
 			{
-				x = std::max( 0,x );
-				x = std::min( int( Graphics::ScreenWidth ) - 1,x );
-				y = std::max( 0,y );
-				y = std::min( int( Graphics::ScreenHeight ) - 1,y );
-				mouse.OnMouseMove( x,y );
+				pt.x = std::max( short( 0 ),pt.x );
+				pt.x = std::min( short( Graphics::ScreenWidth - 1 ),pt.x );
+				pt.y = std::max( short( 0 ),pt.y );
+				pt.y = std::min( short( Graphics::ScreenHeight - 1 ),pt.y );
+				mouse.OnMouseMove( pt.x,pt.y );
 			}
 			else
 			{
 				ReleaseCapture();
 				mouse.OnMouseLeave();
-				mouse.OnLeftReleased( x,y );
-				mouse.OnRightReleased( x,y );
+				mouse.OnLeftReleased( pt.x,pt.y );
+				mouse.OnRightReleased( pt.x,pt.y );
 			}
 		}
 		break;
 	}
 	case WM_LBUTTONDOWN:
 	{
-		int x = LOWORD( lParam );
-		int y = HIWORD( lParam );
-		mouse.OnLeftPressed( x,y );
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnLeftPressed( pt.x,pt.y );
 		break;
 	}
 	case WM_RBUTTONDOWN:
 	{
-		int x = LOWORD( lParam );
-		int y = HIWORD( lParam );
-		mouse.OnRightPressed( x,y );
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnRightPressed( pt.x,pt.y );
 		break;
 	}
 	case WM_LBUTTONUP:
 	{
-		int x = LOWORD( lParam );
-		int y = HIWORD( lParam );
-		mouse.OnLeftReleased( x,y );
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnLeftReleased( pt.x,pt.y );
 		break;
 	}
 	case WM_RBUTTONUP:
 	{
-		int x = LOWORD( lParam );
-		int y = HIWORD( lParam );
-		mouse.OnRightReleased( x,y );
+		const POINTS pt = MAKEPOINTS( lParam );
+		mouse.OnRightReleased( pt.x,pt.y );
 		break;
 	}
 	case WM_MOUSEWHEEL:
 	{
-		int x = LOWORD( lParam );
-		int y = HIWORD( lParam );
+		const POINTS pt = MAKEPOINTS( lParam );
 		if( GET_WHEEL_DELTA_WPARAM( wParam ) > 0 )
 		{
-			mouse.OnWheelUp( x,y );
+			mouse.OnWheelUp( pt.x,pt.y );
 		}
 		else if( GET_WHEEL_DELTA_WPARAM( wParam ) < 0 )
 		{
-			mouse.OnWheelDown( x,y );
+			mouse.OnWheelDown( pt.x,pt.y );
 		}
 		break;
 	}

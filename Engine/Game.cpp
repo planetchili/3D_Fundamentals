@@ -91,22 +91,47 @@ void Game::ComposeFrame()
 		Colors::Blue,
 		Colors::Cyan
 	};
+	// generate indexed triangle list
 	auto triangles = cube.GetTriangles();
+	// generate rotation matrix from euler angles
 	const Mat3 rot =
 		Mat3::RotationX( theta_x ) *
 		Mat3::RotationY( theta_y ) *
 		Mat3::RotationZ( theta_z );
+	// transform from model space -> world (/view) space
 	for( auto& v : triangles.vertices )
 	{
 		v *= rot;
 		v += { 0.0f,0.0f,offset_z };
+	}
+	// backface culling test (must be done in world (/view) space)
+	for( size_t i = 0,
+		 end = triangles.indices.size() / 3;
+		 i < end; i++ )
+	{
+		const Vec3& v0 = triangles.vertices[triangles.indices[i * 3]];
+		const Vec3& v1 = triangles.vertices[triangles.indices[i * 3 + 1]];
+		const Vec3& v2 = triangles.vertices[triangles.indices[i * 3 + 2]];
+		triangles.cullFlags[i] = (v1 - v0) % (v2 - v0) * v0 > 0.0f;
+	}
+	// transform to screen space (includes perspective transform)
+	for( auto& v : triangles.vertices )
+	{
 		pst.Transform( v );
 	}
-	for( auto i = triangles.indices.cbegin(),
-		end = triangles.indices.cend();
-		i != end; std::advance( i,3 ) )
+	// draw the mf triangles!
+	for( size_t i = 0,
+		 end = triangles.indices.size() / 3;
+		 i < end; i++ )
 	{
-		gfx.DrawTriangle( triangles.vertices[*i],triangles.vertices[*std::next( i )],triangles.vertices[*std::next( i,2 )],
-						  colors[std::distance( triangles.indices.cbegin(),i ) / 3] );
+		// skip triangles previously determined to be back-facing
+		if( !triangles.cullFlags[i] )
+		{
+			gfx.DrawTriangle( 
+				triangles.vertices[triangles.indices[i * 3]],
+				triangles.vertices[triangles.indices[i * 3 + 1]],
+				triangles.vertices[triangles.indices[i * 3 + 2]],
+				colors[i] );
+		}
 	}
 }

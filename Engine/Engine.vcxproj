@@ -136,6 +136,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConcaveHexahedron.h" />
+    <ClInclude Include="ConHexScene.h" />
+    <ClInclude Include="ConHexWireScene.h" />
     <ClInclude Include="CubeOrderScene.h" />
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliMath.h" />

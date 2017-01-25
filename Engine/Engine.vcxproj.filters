@@ -19,6 +19,9 @@
     <Filter Include="Header Files\Scenes">
       <UniqueIdentifier>{f342a8ff-8458-4133-bb03-3921dc7721eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Models">
+      <UniqueIdentifier>{43b95830-3b82-4bad-b866-2ca87cb55608}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliWin.h">
@@ -78,9 +81,6 @@
     <ClInclude Include="PubeScreenTransformer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IndexedLineList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,13 +96,22 @@
     <ClInclude Include="CubeOrderScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="ConcaveHexahedron.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ConHexScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="ConHexWireScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="ConcaveHexahedron.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="XQuads.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="XMutualScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>

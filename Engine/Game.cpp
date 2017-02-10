@@ -25,6 +25,7 @@
 #include "ConHexScene.h"
 #include "ConHexWireScene.h"
 #include "XMutualScene.h"
+#include "TexCubeScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -36,6 +37,7 @@ Game::Game( MainWindow& wnd )
 	scenes.push_back( std::make_unique<ConHexScene>() );
 	scenes.push_back( std::make_unique<ConHexWireScene>() );
 	scenes.push_back( std::make_unique<XMutualScene>() );
+	scenes.push_back( std::make_unique<TexCubeScene>() );
 	curScene = scenes.begin();
 }
 

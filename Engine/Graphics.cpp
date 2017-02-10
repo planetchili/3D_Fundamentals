@@ -427,6 +427,51 @@ void Graphics::DrawTriangle( const Vec2& v0,const Vec2& v1,const Vec2& v2,Color 
 	}
 }
 
+void Graphics::DrawTriangleTex( const TexVertex& v0,const TexVertex& v1,const TexVertex& v2,const Surface& tex )
+{
+	// using pointers so we can swap (for sorting purposes)
+	const TexVertex* pv0 = &v0;
+	const TexVertex* pv1 = &v1;
+	const TexVertex* pv2 = &v2;
+
+	// sorting vertices by y
+	if( pv1->pos.y < pv0->pos.y ) std::swap( pv0,pv1 );
+	if( pv2->pos.y < pv1->pos.y ) std::swap( pv1,pv2 );
+	if( pv1->pos.y < pv0->pos.y ) std::swap( pv0,pv1 );
+
+	if( pv0->pos.y == pv1->pos.y ) // natural flat top
+	{
+		// sorting top vertices by x
+		if( pv1->pos.x < pv0->pos.x ) std::swap( pv0,pv1 );
+		DrawFlatTopTriangleTex( *pv0,*pv1,*pv2,tex );
+	}
+	else if( pv1->pos.y == pv2->pos.y ) // natural flat bottom
+	{
+		// sorting bottom vertices by x
+		if( pv2->pos.x < pv1->pos.x ) std::swap( pv1,pv2 );
+		DrawFlatBottomTriangleTex( *pv0,*pv1,*pv2,tex );
+	}
+	else // general triangle
+	{
+		// find splitting vertex
+		const float alphaSplit =
+			(pv1->pos.y - pv0->pos.y) /
+			(pv2->pos.y - pv0->pos.y);
+		const TexVertex vi = pv0->InterpolateTo( *pv2,alphaSplit );
+
+		if( pv1->pos.x < vi.pos.x ) // major right
+		{
+			DrawFlatBottomTriangleTex( *pv0,*pv1,vi,tex );
+			DrawFlatTopTriangleTex( *pv1,vi,*pv2,tex );
+		}
+		else // major left
+		{
+			DrawFlatBottomTriangleTex( *pv0,vi,*pv1,tex );
+			DrawFlatTopTriangleTex( vi,*pv1,*pv2,tex );
+		}
+	}
+}
+
 void Graphics::DrawFlatTopTriangle( const Vec2& v0,const Vec2& v1,const Vec2& v2,Color c )
 {
 	// calulcate slopes in screen space
@@ -479,6 +524,121 @@ void Graphics::DrawFlatBottomTriangle( const Vec2& v0,const Vec2& v1,const Vec2&
 		for( int x = xStart; x < xEnd; x++ )
 		{
 			PutPixel( x,y,c );
+		}
+	}
+}
+
+void Graphics::DrawFlatTopTriangleTex( const TexVertex& v0,const TexVertex& v1,const TexVertex& v2,const Surface& tex )
+{
+	// calulcate slopes in screen space
+	const float m0 = (v2.pos.x - v0.pos.x) / (v2.pos.y - v0.pos.y);
+	const float m1 = (v2.pos.x - v1.pos.x) / (v2.pos.y - v1.pos.y);
+
+	// calculate start and end scanlines
+	const int yStart = (int)ceil( v0.pos.y - 0.5f );
+	const int yEnd = (int)ceil( v2.pos.y - 0.5f ); // the scanline AFTER the last line drawn
+	
+	// init tex coord edges
+	Vec2 tcEdgeL = v0.tc;
+	Vec2 tcEdgeR = v1.tc;
+	const Vec2 tcBottom = v2.tc;
+
+	// calculate tex coord edge unit steps
+	const Vec2 tcEdgeStepL = (tcBottom - tcEdgeL) / (v2.pos.y - v0.pos.y);
+	const Vec2 tcEdgeStepR = (tcBottom - tcEdgeR) / (v2.pos.y - v1.pos.y);
+
+	// do tex coord edge prestep
+	tcEdgeL += tcEdgeStepL * (float( yStart ) + 0.5f - v1.pos.y);
+	tcEdgeR += tcEdgeStepR * (float( yStart ) + 0.5f - v1.pos.y);
+
+	// init tex width/height and clamp values
+	const float tex_width = float( tex.GetWidth() );
+	const float tex_height = float( tex.GetHeight() );
+	const float tex_clamp_x = tex_width - 1.0f;
+	const float tex_clamp_y = tex_height - 1.0f;
+
+	for( int y = yStart; y < yEnd; y++,
+		 tcEdgeL += tcEdgeStepL,tcEdgeR += tcEdgeStepR )
+	{
+		// caluclate start and end points (x-coords)
+		// add 0.5 to y value because we're calculating based on pixel CENTERS
+		const float px0 = m0 * (float( y ) + 0.5f - v0.pos.y) + v0.pos.x;
+		const float px1 = m1 * (float( y ) + 0.5f - v1.pos.y) + v1.pos.x;
+
+		// calculate start and end pixels
+		const int xStart = (int)ceil( px0 - 0.5f );
+		const int xEnd = (int)ceil( px1 - 0.5f ); // the pixel AFTER the last pixel drawn
+
+		// calculate tex coord scanline unit step
+		const Vec2 tcScanStep = (tcEdgeR - tcEdgeL) / (px1 - px0);
+
+		// do tex coord scanline prestep
+		Vec2 tc = tcEdgeL + tcScanStep * (float( xStart ) + 0.5f - px0);
+
+		for( int x = xStart; x < xEnd; x++,tc += tcScanStep )
+		{
+			PutPixel( x,y,tex.GetPixel( 
+				int( std::min( tc.x * tex_width,tex_clamp_x ) ),
+				int( std::min( tc.y * tex_height,tex_clamp_y ) ) ) );
+			// need std::min b/c tc.x/y == 1.0, we'll read off edge of tex
+			// and with fp err, tc.x/y can be > 1.0 (by a tiny amount)
+		}
+	}
+}
+
+void Graphics::DrawFlatBottomTriangleTex( const TexVertex& v0,const TexVertex& v1,const TexVertex& v2,const Surface& tex )
+{
+	// calulcate slopes in screen space
+	const float m0 = (v1.pos.x - v0.pos.x) / (v1.pos.y - v0.pos.y);
+	const float m1 = (v2.pos.x - v0.pos.x) / (v2.pos.y - v0.pos.y);
+
+	// calculate start and end scanlines
+	const int yStart = (int)ceil( v0.pos.y - 0.5f );
+	const int yEnd = (int)ceil( v2.pos.y - 0.5f ); // the scanline AFTER the last line drawn
+		
+	// init tex coord edges
+	Vec2 tcEdgeL = v0.tc;
+	Vec2 tcEdgeR = v0.tc;
+	const Vec2 tcBottomL = v1.tc;
+	const Vec2 tcBottomR = v2.tc;
+
+	// calculate tex coord edge unit steps
+	const Vec2 tcEdgeStepL = (tcBottomL - tcEdgeL) / (v1.pos.y - v0.pos.y);
+	const Vec2 tcEdgeStepR = (tcBottomR - tcEdgeR) / (v2.pos.y - v0.pos.y);
+
+	// do tex coord edge prestep
+	tcEdgeL += tcEdgeStepL * (float( yStart ) + 0.5f - v0.pos.y);
+	tcEdgeR += tcEdgeStepR * (float( yStart ) + 0.5f - v0.pos.y);
+
+	// init tex width/height and clamp values
+	const float tex_width = float( tex.GetWidth() );
+	const float tex_height = float( tex.GetHeight() );
+	const float tex_clamp_x = tex_width - 1.0f;
+	const float tex_clamp_y = tex_height - 1.0f;
+
+	for( int y = yStart; y < yEnd; y++,
+		 tcEdgeL += tcEdgeStepL,tcEdgeR += tcEdgeStepR )
+	{
+		// caluclate start and end points
+		// add 0.5 to y value because we're calculating based on pixel CENTERS
+		const float px0 = m0 * (float( y ) + 0.5f - v0.pos.y) + v0.pos.x;
+		const float px1 = m1 * (float( y ) + 0.5f - v0.pos.y) + v0.pos.x;
+
+		// calculate start and end pixels
+		const int xStart = (int)ceil( px0 - 0.5f );
+		const int xEnd = (int)ceil( px1 - 0.5f ); // the pixel AFTER the last pixel drawn
+
+		// calculate tex coord scanline unit step
+		const Vec2 tcScanStep = (tcEdgeR - tcEdgeL) / (px1 - px0);
+
+		// do tex coord scanline prestep
+		Vec2 tc = tcEdgeL + tcScanStep * (float( xStart ) + 0.5f - px0);
+
+		for( int x = xStart; x < xEnd; x++,tc += tcScanStep )
+		{
+			PutPixel( x,y,tex.GetPixel(
+				int( std::min( tc.x * tex_width,tex_clamp_x ) ),
+				int( std::min( tc.y * tex_height,tex_clamp_y ) ) ) );
 		}
 	}
 }

@@ -26,20 +26,21 @@ template <typename T>
 class _Vec2
 {
 public:
-	_Vec2() {}
+	_Vec2()
+	{}
 	_Vec2( T x,T y )
 		:
-	x( x ),
-	y( y )
+		x( x ),
+		y( y )
 	{}
 	_Vec2( const _Vec2& vect )
 		:
-	_Vec2( vect.x,vect.y )
+		_Vec2( vect.x,vect.y )
 	{}
 	template <typename T2>
 	explicit operator _Vec2<T2>() const
 	{
-		return { (T2)x,(T2)y };
+		return{ (T2)x,(T2)y };
 	}
 	T		LenSq() const
 	{
@@ -87,7 +88,7 @@ public:
 	T		operator*( const _Vec2 &rhs ) const
 	{
 		return x * rhs.x + y * rhs.y;
-	}	
+	}
 	_Vec2	operator+( const _Vec2 &rhs ) const
 	{
 		return _Vec2( *this ) += rhs;
@@ -120,9 +121,13 @@ public:
 	{
 		return x == rhs.x && y == rhs.y;
 	}
-	bool	operator!=(const _Vec2 &rhs) const
+	bool	operator!=( const _Vec2 &rhs ) const
 	{
 		return !(*this == rhs);
+	}
+	_Vec2	InterpolateTo( const _Vec2& dest,T alpha ) const
+	{
+		return *this + (dest - *this) * alpha;
 	}
 public:
 	T x;

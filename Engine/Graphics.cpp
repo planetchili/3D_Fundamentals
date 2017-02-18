@@ -544,8 +544,8 @@ void Graphics::DrawFlatTopTriangleTex( const TexVertex& v0,const TexVertex& v1,c
 	const int yEnd = (int)ceil( v2.pos.y - 0.5f ); // the scanline AFTER the last line drawn
 	
 	// do interpolant prestep
-	itEdge0 += dv0 * (float( yStart ) + 0.5f - v1.pos.y);
-	itEdge1 += dv1 * (float( yStart ) + 0.5f - v1.pos.y);
+	itEdge0 += dv0 * (float( yStart ) + 0.5f - v0.pos.y);
+	itEdge1 += dv1 * (float( yStart ) + 0.5f - v0.pos.y);
 
 	// init tex width/height and clamp values
 	const float tex_width = float( tex.GetWidth() );
@@ -578,27 +578,22 @@ void Graphics::DrawFlatTopTriangleTex( const TexVertex& v0,const TexVertex& v1,c
 
 void Graphics::DrawFlatBottomTriangleTex( const TexVertex& v0,const TexVertex& v1,const TexVertex& v2,const Surface& tex )
 {
-	// calulcate slopes in screen space
-	const float m0 = (v1.pos.x - v0.pos.x) / (v1.pos.y - v0.pos.y);
-	const float m1 = (v2.pos.x - v0.pos.x) / (v2.pos.y - v0.pos.y);
+	// calulcate dVertex / dy
+	const float delta_y = v2.pos.y - v0.pos.y;
+	const TexVertex dv0 = (v1 - v0) / delta_y;
+	const TexVertex dv1 = (v2 - v0) / delta_y;
+
+	// create edge interpolants
+	TexVertex itEdge0 = v0;
+	TexVertex itEdge1 = v0;
 
 	// calculate start and end scanlines
 	const int yStart = (int)ceil( v0.pos.y - 0.5f );
 	const int yEnd = (int)ceil( v2.pos.y - 0.5f ); // the scanline AFTER the last line drawn
-		
-	// init tex coord edges
-	Vec2 tcEdgeL = v0.tc;
-	Vec2 tcEdgeR = v0.tc;
-	const Vec2 tcBottomL = v1.tc;
-	const Vec2 tcBottomR = v2.tc;
 
-	// calculate tex coord edge unit steps
-	const Vec2 tcEdgeStepL = (tcBottomL - tcEdgeL) / (v1.pos.y - v0.pos.y);
-	const Vec2 tcEdgeStepR = (tcBottomR - tcEdgeR) / (v2.pos.y - v0.pos.y);
-
-	// do tex coord edge prestep
-	tcEdgeL += tcEdgeStepL * (float( yStart ) + 0.5f - v0.pos.y);
-	tcEdgeR += tcEdgeStepR * (float( yStart ) + 0.5f - v0.pos.y);
+	// do interpolant prestep
+	itEdge0 += dv0 * (float( yStart ) + 0.5f - v0.pos.y);
+	itEdge1 += dv1 * (float( yStart ) + 0.5f - v0.pos.y);
 
 	// init tex width/height and clamp values
 	const float tex_width = float( tex.GetWidth() );
@@ -606,29 +601,25 @@ void Graphics::DrawFlatBottomTriangleTex( const TexVertex& v0,const TexVertex& v
 	const float tex_clamp_x = tex_width - 1.0f;
 	const float tex_clamp_y = tex_height - 1.0f;
 
-	for( int y = yStart; y < yEnd; y++,
-		 tcEdgeL += tcEdgeStepL,tcEdgeR += tcEdgeStepR )
+	for( int y = yStart; y < yEnd; y++,itEdge0 += dv0,itEdge1 += dv1 )
 	{
-		// caluclate start and end points
-		// add 0.5 to y value because we're calculating based on pixel CENTERS
-		const float px0 = m0 * (float( y ) + 0.5f - v0.pos.y) + v0.pos.x;
-		const float px1 = m1 * (float( y ) + 0.5f - v0.pos.y) + v0.pos.x;
-
 		// calculate start and end pixels
-		const int xStart = (int)ceil( px0 - 0.5f );
-		const int xEnd = (int)ceil( px1 - 0.5f ); // the pixel AFTER the last pixel drawn
+		const int xStart = (int)ceil( itEdge0.pos.x - 0.5f );
+		const int xEnd = (int)ceil( itEdge1.pos.x - 0.5f ); // the pixel AFTER the last pixel drawn
+		
+		// calculate scanline dTexCoord / dx
+		const Vec2 dtcLine = (itEdge1.tc - itEdge0.tc) / (itEdge1.pos.x - itEdge0.pos.x);
 
-		// calculate tex coord scanline unit step
-		const Vec2 tcScanStep = (tcEdgeR - tcEdgeL) / (px1 - px0);
+		// create scanline tex coord interpolant and prestep
+		Vec2 itcLine = itEdge0.tc + dtcLine * (float( xStart ) + 0.5f - itEdge0.pos.x);
 
-		// do tex coord scanline prestep
-		Vec2 tc = tcEdgeL + tcScanStep * (float( xStart ) + 0.5f - px0);
-
-		for( int x = xStart; x < xEnd; x++,tc += tcScanStep )
+		for( int x = xStart; x < xEnd; x++,itcLine += dtcLine )
 		{
 			PutPixel( x,y,tex.GetPixel(
-				int( std::min( tc.x * tex_width,tex_clamp_x ) ),
-				int( std::min( tc.y * tex_height,tex_clamp_y ) ) ) );
+				int( std::min( itcLine.x * tex_width,tex_clamp_x ) ),
+				int( std::min( itcLine.y * tex_height,tex_clamp_y ) ) ) );
+			// need std::min b/c tc.x/y == 1.0, we'll read off edge of tex
+			// and with fp err, tc.x/y can be > 1.0 (by a tiny amount)
 		}
 	}
 }

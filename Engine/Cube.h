@@ -9,23 +9,23 @@
 class Cube
 {
 public:
-	Cube( float size )
+	Cube( float size,float texdim = 1.0f )
 	{
 		const float side = size / 2.0f;
 		vertices.emplace_back( -side,-side,-side ); // 0
-		tc.emplace_back( 0.0f,1.0f );
+		tc.emplace_back( 0.0f,texdim );
 		vertices.emplace_back( side,-side,-side ); // 1
-		tc.emplace_back( 1.0f,1.0f );
+		tc.emplace_back( texdim,texdim );
 		vertices.emplace_back( -side,side,-side ); // 2
 		tc.emplace_back( 0.0f,0.0f );
 		vertices.emplace_back( side,side,-side ); // 3
-		tc.emplace_back( 1.0f,0.0f );
+		tc.emplace_back( texdim,0.0f );
 		vertices.emplace_back( -side,-side,side ); // 4
-		tc.emplace_back( 1.0f,1.0f );
+		tc.emplace_back( texdim,texdim );
 		vertices.emplace_back( side,-side,side ); // 5
-		tc.emplace_back( 0.0f,1.0f );
+		tc.emplace_back( 0.0f,texdim );
 		vertices.emplace_back( -side,side,side ); // 6
-		tc.emplace_back( 1.0f,0.0f );
+		tc.emplace_back( texdim,0.0f );
 		vertices.emplace_back( side,side,side ); // 7
 		tc.emplace_back( 0.0f,0.0f );
 	}

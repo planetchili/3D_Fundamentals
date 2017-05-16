@@ -27,6 +27,7 @@
 #include "XMutualScene.h"
 #include "TexCubeScene.h"
 #include "TexWrapCubeScene.h"
+#include <sstream>
 
 Game::Game( MainWindow& wnd )
 	:
@@ -43,6 +44,7 @@ Game::Game( MainWindow& wnd )
 	scenes.push_back( std::make_unique<TexWrapCubeScene>( 2.0f ) );
 	scenes.push_back( std::make_unique<TexWrapCubeScene>( 6.0f ) );
 	curScene = scenes.begin();
+	OutputSceneName();
 }
 
 void Game::Go()
@@ -64,6 +66,10 @@ void Game::UpdateModel()
 		{
 			CycleScenes();
 		}
+		else if( e.GetCode() == VK_ESCAPE && e.IsPress() )
+		{
+			wnd.Kill();
+		}
 	}
 	// update scene
 	(*curScene)->Update( wnd.kbd,wnd.mouse,dt );
@@ -75,6 +81,18 @@ void Game::CycleScenes()
 	{
 		curScene = scenes.begin();
 	}
+	OutputSceneName();
+}
+
+void Game::OutputSceneName() const
+{
+	std::stringstream ss;
+	const std::string stars( (*curScene)->GetName().size() + 4,'*' );
+
+	ss << stars << std::endl 
+		<< "* " << (*curScene)->GetName() << " *" << std::endl 
+		<< stars << std::endl;
+	OutputDebugStringA( ss.str().c_str() );
 }
 
 void Game::ComposeFrame()

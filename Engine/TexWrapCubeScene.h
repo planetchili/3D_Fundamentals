@@ -12,7 +12,8 @@ class TexWrapCubeScene : public Scene
 public:
 	TexWrapCubeScene( float texdim )
 		:
-		cube( 1.0f,texdim )
+		cube( 1.0f,texdim ),
+		Scene( std::string( "Textured Cube Butthole Sauron Wrapping Dim: " ) + std::to_string( texdim ) )
 	{}
 	virtual void Update( Keyboard& kbd,Mouse& mouse,float dt ) override
 	{

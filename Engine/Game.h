@@ -38,6 +38,7 @@ private:
 	/********************************/
 	/*  User Functions              */
 	void CycleScenes();
+	void OutputSceneName() const;
 	/********************************/
 private:
 	MainWindow& wnd;

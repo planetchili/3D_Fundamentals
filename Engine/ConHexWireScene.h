@@ -9,7 +9,10 @@
 class ConHexWireScene : public Scene
 {
 public:
-	ConHexWireScene() = default;
+	ConHexWireScene()
+		:
+		Scene( "Concave Hexahedron Filled Wireframe" )
+	{}
 	virtual void Update( Keyboard& kbd,Mouse& mouse,float dt ) override
 	{
 		if( kbd.KeyIsPressed( 'Q' ) )

@@ -9,6 +9,10 @@ class TexCubeScene : public Scene
 {
 public:
 	TexCubeScene() = default;
+	TexCubeScene( float texdim )
+		:
+		cube( 1.0f,texdim )
+	{}
 	virtual void Update( Keyboard& kbd,Mouse& mouse,float dt ) override
 	{
 		if( kbd.KeyIsPressed( 'Q' ) )

@@ -10,7 +10,10 @@
 class TexWrapCubeScene : public Scene
 {
 public:
-	TexWrapCubeScene() = default;
+	TexWrapCubeScene( float texdim )
+		:
+		cube( 1.0f,texdim )
+	{}
 	virtual void Update( Keyboard& kbd,Mouse& mouse,float dt ) override
 	{
 		if( kbd.KeyIsPressed( 'Q' ) )
@@ -95,7 +98,7 @@ public:
 	}
 private:
 	PubeScreenTransformer pst;
-	Cube cube = Cube( 1.0f,2.0f );
+	Cube cube;
 	Surface sbTex = Surface::FromFile( L"Images\\sauron-bhole-100x100.png" );
 	static constexpr float dTheta = PI;
 	float offset_z = 2.0f;

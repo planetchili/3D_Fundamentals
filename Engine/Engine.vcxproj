@@ -147,6 +147,8 @@
     <ClInclude Include="ChiliWin.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="CubeSkinned.h" />
+    <ClInclude Include="CubeSkinnedScene.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="FoldedCubeScene.h" />
     <ClInclude Include="FoldedCubeWrapScene.h" />

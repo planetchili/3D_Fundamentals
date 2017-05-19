@@ -38,6 +38,7 @@ private:
 	/********************************/
 	/*  User Functions              */
 	void CycleScenes();
+	void ReverseCycleScenes();
 	void OutputSceneName() const;
 	/********************************/
 private:

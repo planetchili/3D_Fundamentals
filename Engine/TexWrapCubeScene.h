@@ -10,6 +10,14 @@
 class TexWrapCubeScene : public Scene
 {
 public:
+	TexWrapCubeScene( const std::wstring& texname,float texdim )
+		:
+		sbTex( Surface::FromFile( texname ) ),
+		cube( 1.0f,texdim ),
+		Scene( std::string( "Textured Cube " ) + 
+			   std::string( texname.begin(),texname.end() ) + 
+			   " Wrapping Dim: " + std::to_string( texdim ) )
+	{}
 	TexWrapCubeScene( float texdim )
 		:
 		cube( 1.0f,texdim ),

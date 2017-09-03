@@ -21,6 +21,7 @@
 #pragma once
 
 #include "ChiliMath.h"
+#include "Vec2.h"
 
 template <typename T>
 class _Vec3 : public _Vec2<T>

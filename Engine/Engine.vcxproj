@@ -142,6 +142,7 @@
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeSkinScene.h" />
+    <ClInclude Include="CubeVertexColorScene.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
+    <ClInclude Include="VertexColorEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp" />

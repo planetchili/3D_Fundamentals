@@ -39,6 +39,54 @@ public:
 		};
 	}
 	template<class V>
+	static IndexedTriangleList<V> GetPlainIndependentFaces( float size = 1.0f )
+	{
+		const float side = size / 2.0f;
+
+		std::vector<Vec3> vertices;
+
+		vertices.emplace_back( -side,-side,-side ); // 0 near side
+		vertices.emplace_back( side,-side,-side ); // 1
+		vertices.emplace_back( -side,side,-side ); // 2
+		vertices.emplace_back( side,side,-side ); // 3
+		vertices.emplace_back( -side,-side,side ); // 4 far side
+		vertices.emplace_back( side,-side,side ); // 5
+		vertices.emplace_back( -side,side,side ); // 6
+		vertices.emplace_back( side,side,side ); // 7
+		vertices.emplace_back( -side,-side,-side ); // 8 left side
+		vertices.emplace_back( -side,side,-side ); // 9
+		vertices.emplace_back( -side,-side,side ); // 10
+		vertices.emplace_back( -side,side,side ); // 11
+		vertices.emplace_back( side,-side,-side ); // 12 right side
+		vertices.emplace_back( side,side,-side ); // 13
+		vertices.emplace_back( side,-side,side ); // 14
+		vertices.emplace_back( side,side,side ); // 15
+		vertices.emplace_back( -side,-side,-side ); // 16 bottom side
+		vertices.emplace_back( side,-side,-side ); // 17
+		vertices.emplace_back( -side,-side,side ); // 18
+		vertices.emplace_back( side,-side,side ); // 19
+		vertices.emplace_back( -side,side,-side ); // 20 top side
+		vertices.emplace_back( side,side,-side ); // 21
+		vertices.emplace_back( -side,side,side ); // 22
+		vertices.emplace_back( side,side,side ); // 23
+
+		std::vector<V> verts( vertices.size() );
+		for( size_t i = 0; i < vertices.size(); i++ )
+		{
+			verts[i].pos = vertices[i];
+		}
+		return{
+			std::move( verts ),{
+				0,2, 1,    2,3,1,
+				4,5, 7,    4,7,6,
+				8,10, 9,  10,11,9,
+				12,13,15, 12,15,14,
+				16,17,18, 18,17,19,
+				20,23,21, 20,22,23
+			}
+		};
+	}
+	template<class V>
 	static IndexedTriangleList<V> GetSkinned( float size = 1.0f )
 	{
 		const float side = size / 2.0f;

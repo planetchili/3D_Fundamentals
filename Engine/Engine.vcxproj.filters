@@ -22,6 +22,9 @@
     <Filter Include="Header Files\Models">
       <UniqueIdentifier>{43b95830-3b82-4bad-b866-2ca87cb55608}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effects">
+      <UniqueIdentifier>{acb1ee96-189f-403b-8d65-ba9003995dcf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliWin.h">
@@ -101,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="CubeSkinScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureEffect.h">
+      <Filter>Header Files\Effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

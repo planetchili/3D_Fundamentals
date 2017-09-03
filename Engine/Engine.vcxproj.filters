@@ -81,68 +81,26 @@
     <ClInclude Include="PubeScreenTransformer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IndexedLineList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IndexedTriangleList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SolidCubeScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeOrderScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="ConHexScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="ConHexWireScene.h">
-      <Filter>Header Files\Scenes</Filter>
+    <ClInclude Include="FrameTimer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="ConcaveHexahedron.h">
-      <Filter>Header Files\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="XQuads.h">
-      <Filter>Header Files\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="XMutualScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="TexVertex.h">
+    <ClInclude Include="Pipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TexCubeScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="TexWrapCubeScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeFolded.h">
-      <Filter>Header Files\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="FoldedCubeScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeFoldedWrap.h">
-      <Filter>Header Files\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="FoldedCubeWrapScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeSkinned.h">
-      <Filter>Header Files\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeSkinnedScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameTimer.h">
+    <ClInclude Include="Triangle.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSkinScene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

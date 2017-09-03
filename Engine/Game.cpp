@@ -20,16 +20,7 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "SolidCubeScene.h"
-#include "CubeOrderScene.h"
-#include "ConHexScene.h"
-#include "ConHexWireScene.h"
-#include "XMutualScene.h"
-#include "TexCubeScene.h"
-#include "TexWrapCubeScene.h"
-#include "FoldedCubeScene.h"
-#include "FoldedCubeWrapScene.h"
-#include "CubeSkinnedScene.h"
+#include "CubeSkinScene.h"
 #include <sstream>
 
 Game::Game( MainWindow& wnd )
@@ -37,21 +28,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	scenes.push_back( std::make_unique<SolidCubeScene>() );
-	scenes.push_back( std::make_unique<CubeOrderScene>() );
-	scenes.push_back( std::make_unique<ConHexScene>() );
-	scenes.push_back( std::make_unique<ConHexWireScene>() );
-	scenes.push_back( std::make_unique<XMutualScene>() );
-	scenes.push_back( std::make_unique<TexCubeScene>() );
-	scenes.push_back( std::make_unique<TexCubeScene>( 2.0f ) );
-	scenes.push_back( std::make_unique<TexWrapCubeScene>( 2.0f ) );
-	scenes.push_back( std::make_unique<TexWrapCubeScene>( 6.0f ) );
-	scenes.push_back( std::make_unique<TexWrapCubeScene>( L"images\\wood.jpg",2.0f ) );
-	scenes.push_back( std::make_unique<FoldedCubeScene>() );
-	scenes.push_back( std::make_unique<FoldedCubeWrapScene>() );
-	scenes.push_back( std::make_unique<CubeSkinnedScene>( L"images\\dice_skin.png" ) );
-	scenes.push_back( std::make_unique<CubeSkinnedScene>( L"images\\office_skin.jpg" ) );
-	scenes.push_back( std::make_unique<CubeSkinnedScene>( L"images\\office_skin_lores.png" ) );
+	scenes.push_back( std::make_unique<CubeSkinScene>( gfx,L"images\\office_skin.jpg" ) );
 	curScene = scenes.begin();
 	OutputSceneName();
 }
@@ -127,5 +104,5 @@ void Game::OutputSceneName() const
 void Game::ComposeFrame()
 {
 	// draw scene
-	(*curScene)->Draw( gfx );
+	(*curScene)->Draw();
 }

@@ -58,7 +58,7 @@ private:
 	{
 		// assemble triangles in the stream and process
 		for( size_t i = 0,end = indices.size() / 3;
-			 i < end; i++ )
+			 i < end; i++,triangle_index++ )
 		{
 			// determine triangle vertices via indexing
 			const auto& v0 = vertices[indices[i * 3]];

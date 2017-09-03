@@ -16,7 +16,7 @@ public:
 		:
 		itlist( Cube::GetPlainIndependentFaces<Vertex>() ),
 		pipeline( gfx ),
-		Scene( "Colored cube vertex gradient scene" )
+		Scene( "Colored cube solid independent faces scene" )
 	{
 		const Color colors[] = {
 			Colors::Red,Colors::Green,Colors::Blue,Colors::Magenta,Colors::Yellow,Colors::Cyan

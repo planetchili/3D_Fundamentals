@@ -16,7 +16,7 @@ public:
 		:
 		itlist( Cube::GetPlain<Vertex>() ),
 		pipeline( gfx ),
-		Scene( "Colored cube vertex gradient scene" )
+		Scene( "Cube vertex position color scene" )
 	{}
 	virtual void Update( Keyboard& kbd,Mouse& mouse,float dt ) override
 	{

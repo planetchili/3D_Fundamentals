@@ -18,6 +18,7 @@ public:
 	// vertex type used for geometry and throughout pipeline
 	typedef typename Effect::Vertex Vertex;
 	typedef typename Effect::VertexShader::Output VSOut;
+	typedef typename Effect::GeometryShader::Output GSOut;
 public:
 	Pipeline( Graphics& gfx )
 		:
@@ -28,10 +29,11 @@ public:
 	{
 		ProcessVertices( triList.vertices,triList.indices );
 	}
-	// needed to reset the z-buffer after each frame
+	// needed to reset the z-buffer and tri idx after each frame
 	void BeginFrame()
 	{
 		zb.Clear();
+		triangle_index = 0u;
 	}
 private:
 	// vertex processing function
@@ -71,17 +73,17 @@ private:
 		}
 	}
 	// triangle processing function
-	// takes 3 vertices to generate triangle
+	// passes 3 vertices to gs to generate triangle
 	// sends generated triangle to post-processing
 	void ProcessTriangle( const VSOut& v0,const VSOut& v1,const VSOut& v2 )
 	{
 		// generate triangle from 3 vertices using gs
 		// and send to post-processing
-		PostProcessTriangleVertices( Triangle<VSOut>{ v0,v1,v2 } );
+		PostProcessTriangleVertices( effect.gs( v0,v1,v2,triangle_index ) );
 	}
 	// vertex post-processing function
 	// perform perspective and viewport transformations
-	void PostProcessTriangleVertices( Triangle<VSOut>& triangle )
+	void PostProcessTriangleVertices( Triangle<GSOut>& triangle )
 	{
 		// perspective divide and screen transform for all 3 vertices
 		pst.Transform( triangle.v0 );
@@ -97,12 +99,12 @@ private:
 	//
 	// entry point for tri rasterization
 	// sorts vertices, determines case, splits to flat tris, dispatches to flat tri funcs
-	void DrawTriangle( const Triangle<VSOut>& triangle )
+	void DrawTriangle( const Triangle<GSOut>& triangle )
 	{
 		// using pointers so we can swap (for sorting purposes)
-		const VSOut* pv0 = &triangle.v0;
-		const VSOut* pv1 = &triangle.v1;
-		const VSOut* pv2 = &triangle.v2;
+		const GSOut* pv0 = &triangle.v0;
+		const GSOut* pv1 = &triangle.v1;
+		const GSOut* pv2 = &triangle.v2;
 
 		// sorting vertices by y
 		if( pv1->pos.y < pv0->pos.y ) std::swap( pv0,pv1 );
@@ -144,9 +146,9 @@ private:
 		}
 	}
 	// does flat *TOP* tri-specific calculations and calls DrawFlatTriangle
-	void DrawFlatTopTriangle( const VSOut& it0,
-							  const VSOut& it1,
-							  const VSOut& it2 )
+	void DrawFlatTopTriangle( const GSOut& it0,
+							  const GSOut& it1,
+							  const GSOut& it2 )
 	{
 		// calulcate dVertex / dy
 		// change in interpolant for every 1 change in y
@@ -161,9 +163,9 @@ private:
 		DrawFlatTriangle( it0,it1,it2,dit0,dit1,itEdge1 );
 	}
 	// does flat *BOTTOM* tri-specific calculations and calls DrawFlatTriangle
-	void DrawFlatBottomTriangle( const VSOut& it0,
-								 const VSOut& it1,
-								 const VSOut& it2 )
+	void DrawFlatBottomTriangle( const GSOut& it0,
+								 const GSOut& it1,
+								 const GSOut& it2 )
 	{
 		// calulcate dVertex / dy
 		// change in interpolant for every 1 change in y
@@ -180,12 +182,12 @@ private:
 	// does processing common to both flat top and flat bottom tris
 	// scan over triangle in screen space, interpolate attributes,
 	// depth cull, invoke ps and write pixel to screen
-	void DrawFlatTriangle( const VSOut& it0,
-						   const VSOut& it1,
-						   const VSOut& it2,
-						   const VSOut& dv0,
-						   const VSOut& dv1,
-						   VSOut itEdge1 )
+	void DrawFlatTriangle( const GSOut& it0,
+						   const GSOut& it1,
+						   const GSOut& it2,
+						   const GSOut& dv0,
+						   const GSOut& dv1,
+						   GSOut itEdge1 )
 	{
 		// create edge interpolant for left edge (always v0)
 		auto itEdge0 = it0;
@@ -241,4 +243,5 @@ private:
 	Graphics& gfx;
 	PubeScreenTransformer pst;
 	ZBuffer zb;
+	unsigned int triangle_index;
 };

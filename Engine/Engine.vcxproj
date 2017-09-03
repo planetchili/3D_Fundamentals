@@ -141,6 +141,7 @@
     <ClInclude Include="ChiliWin.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="CubeFlatIndependentScene.h" />
     <ClInclude Include="CubeSkinScene.h" />
     <ClInclude Include="CubeSolidGeometryScene.h" />
     <ClInclude Include="CubeSolidScene.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
     <ClInclude Include="VertexColorEffect.h" />
+    <ClInclude Include="VertexFlatEffect.h" />
     <ClInclude Include="VertexPositionColorEffect.h" />
     <ClInclude Include="VertexWaveScene.h" />
     <ClInclude Include="WaveVertexTextureEffect.h" />

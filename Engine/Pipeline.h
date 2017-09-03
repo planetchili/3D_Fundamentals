@@ -179,7 +179,8 @@ private:
 		DrawFlatTriangle( it0,it1,it2,dit0,dit1,itEdge1 );
 	}
 	// does processing common to both flat top and flat bottom tris
-	// texture lookup and pixel written here
+	// scan over triangle in screen space, interpolate attributes,
+	// invoke ps and write pixel to screen
 	void DrawFlatTriangle( const Vertex& it0,
 						   const Vertex& it1,
 						   const Vertex& it2,

@@ -144,6 +144,7 @@
     <ClInclude Include="CubeSkinScene.h" />
     <ClInclude Include="CubeSolidScene.h" />
     <ClInclude Include="CubeVertexColorScene.h" />
+    <ClInclude Include="DoubleCubeScene.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />

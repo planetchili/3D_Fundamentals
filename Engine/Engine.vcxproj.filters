@@ -120,6 +120,9 @@
     <ClInclude Include="SolidEffect.h">
       <Filter>Header Files\Effects</Filter>
     </ClInclude>
+    <ClInclude Include="DoubleCubeScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">

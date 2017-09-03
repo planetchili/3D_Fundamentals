@@ -154,6 +154,8 @@
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GDIPlusManager.h" />
+    <ClInclude Include="GeometryFlatEffect.h" />
+    <ClInclude Include="GeometryFlatScene.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="Keyboard.h" />

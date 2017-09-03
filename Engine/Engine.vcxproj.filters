@@ -25,6 +25,9 @@
     <Filter Include="Header Files\Effects">
       <UniqueIdentifier>{acb1ee96-189f-403b-8d65-ba9003995dcf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effects\Shaders">
+      <UniqueIdentifier>{deba1b6f-037b-49f6-92bd-065e2cb0aff7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliWin.h">
@@ -125,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="ZBuffer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultVertexShader.h">
+      <Filter>Header Files\Effects\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

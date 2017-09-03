@@ -100,9 +100,9 @@ private:
 	void DrawTriangle( const Triangle<VSOut>& triangle )
 	{
 		// using pointers so we can swap (for sorting purposes)
-		const Vertex* pv0 = &triangle.v0;
-		const Vertex* pv1 = &triangle.v1;
-		const Vertex* pv2 = &triangle.v2;
+		const VSOut* pv0 = &triangle.v0;
+		const VSOut* pv1 = &triangle.v1;
+		const VSOut* pv2 = &triangle.v2;
 
 		// sorting vertices by y
 		if( pv1->pos.y < pv0->pos.y ) std::swap( pv0,pv1 );

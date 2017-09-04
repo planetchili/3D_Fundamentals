@@ -101,19 +101,117 @@ public:
 		float freqScroll = 5.0f;
 		float amplitude = 0.05f;
 	};
-	// default gs passes vertices through and outputs triangle
-	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
-	// texture clamped ps
+	// calculate lighting intensity based on light direction
+	// and a face normal computed from geometry with cross product
+	class GeometryShader
+	{
+	public:
+		class Output
+		{
+		public:
+			Output() = default;
+			Output( const Vec3& pos )
+				:
+				pos( pos )
+			{}
+			Output( const Vec3& pos,const Output& src )
+				:
+				t( src.t ),
+				l( src.l ),
+				pos( pos )
+			{}
+			Output( const Vec3& pos,const Vec2& t,float l )
+				:
+				t( t ),
+				l( l ),
+				pos( pos )
+			{}
+			Output& operator+=( const Output& rhs )
+			{
+				pos += rhs.pos;
+				t += rhs.t;
+				return *this;
+			}
+			Output operator+( const Output& rhs ) const
+			{
+				return Output( *this ) += rhs;
+			}
+			Output& operator-=( const Output& rhs )
+			{
+				pos -= rhs.pos;
+				t -= rhs.t;
+				return *this;
+			}
+			Output operator-( const Output& rhs ) const
+			{
+				return Output( *this ) -= rhs;
+			}
+			Output& operator*=( float rhs )
+			{
+				pos *= rhs;
+				t *= rhs;
+				return *this;
+			}
+			Output operator*( float rhs ) const
+			{
+				return Output( *this ) *= rhs;
+			}
+			Output& operator/=( float rhs )
+			{
+				pos /= rhs;
+				t /= rhs;
+				return *this;
+			}
+			Output operator/( float rhs ) const
+			{
+				return Output( *this ) /= rhs;
+			}
+		public:
+			Vec3 pos;
+			Vec2 t;
+			float l;
+		};
+	public:
+		Triangle<Output> operator()( const VertexShader::Output& in0,const VertexShader::Output& in1,const VertexShader::Output& in2,size_t triangle_index ) const
+		{
+			// calculate face normal
+			const auto n = ((in1.pos - in0.pos) % (in2.pos - in0.pos)).GetNormalized();
+			// calculate intensity based on angle of incidence plus ambient and saturate
+			const auto l = std::min( 1.0f,diffuse * std::max( 0.0f,-n * dir ) + ambient );
+			return{ { in0.pos,in0.t,l },{ in1.pos,in1.t,l },{ in2.pos,in2.t,l } };
+		}
+		void SetDiffuseLight( float d )
+		{
+			diffuse = d;
+		}
+		void SetAmbientLight( float a )
+		{
+			ambient = a;
+		}
+		void SetLightDirection( const Vec3& dl )
+		{
+			assert( dl.LenSq() >= 0.001f );
+			dir = dl.GetNormalized();
+		}
+	private:
+		Mat3 rotation;
+		Vec3 translation;
+		Vec3 dir = { 0.0f,0.0f,1.0f };
+		float diffuse = 1.0f;
+		float ambient = 0.15f;
+	};
+	// texture clamped ps with light intensity input
 	class PixelShader
 	{
 	public:
 		template<class Input>
 		Color operator()( const Input& in ) const
 		{
-			return pTex->GetPixel(
+			const Vec3 color = Vec3( pTex->GetPixel(
 				(unsigned int)std::min( in.t.x * tex_width + 0.5f,tex_xclamp ),
 				(unsigned int)std::min( in.t.y * tex_height + 0.5f,tex_yclamp )
-			);
+			) );
+			return Color( color * in.l );
 		}
 		void BindTexture( const std::wstring& filename )
 		{

@@ -14,7 +14,7 @@ public:
 public:
 	CubeSolidGeometryScene( Graphics& gfx )
 		:
-		itlist( Cube::GetPlainIndependentFaces<Vertex>() ),
+		itlist( Cube::GetPlain<Vertex>() ),
 		pipeline( gfx ),
 		Scene( "Colored cube geometry solid face scene" )
 	{

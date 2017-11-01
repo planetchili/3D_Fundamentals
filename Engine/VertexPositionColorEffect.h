@@ -57,7 +57,6 @@ public:
 		}
 	public:
 		Vec3 pos;
-		Vec3 color;
 	};
 	// uses x,y,z position components to determine color
 	class VertexShader

@@ -196,8 +196,13 @@ public:
 	private:
 		Mat3 rotation;
 		Vec3 translation;
+		// direction of travel of light rays
 		Vec3 dir = { 0.0f,0.0f,1.0f };
+		// this is the intensity if direct light from source
+		// white light so only need 1 channel to represent it
 		float diffuse = 1.0f;
+		// this is intensity of indirect light that bounces off other obj in scene
+		// white light so only need 1 channel to represent it
 		float ambient = 0.15f;
 	};
 	// texture clamped ps with light intensity input
@@ -207,10 +212,13 @@ public:
 		template<class Input>
 		Color operator()( const Input& in ) const
 		{
+			// lookup color in texture
 			const Vec3 color = Vec3( pTex->GetPixel(
 				(unsigned int)std::min( in.t.x * tex_width + 0.5f,tex_xclamp ),
 				(unsigned int)std::min( in.t.y * tex_height + 0.5f,tex_yclamp )
 			) );
+			// use texture color as material to determine ratio / magnitude
+			// of the different color components diffuse reflected from triangle at this pt.
 			return Color( color * in.l );
 		}
 		void BindTexture( const std::wstring& filename )

@@ -89,10 +89,12 @@ public:
 	template<class V>
 	static IndexedTriangleList<V> GetIndependentFacesNormals( float size = 1.0f )
 	{
+		// first generate cube vertex positions (independent faces)
 		auto cube = GetPlainIndependentFaces<V>( size );
 
 		std::vector<Vec3> vertices;
 
+		// then for each vertex, add the normal (determined by inspection of cube)
 		//vertices.emplace_back( -side,-side,-side ); // 0 near side
 		//vertices.emplace_back( side,-side,-side ); // 1
 		//vertices.emplace_back( -side,side,-side ); // 2

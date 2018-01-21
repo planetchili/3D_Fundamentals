@@ -138,6 +138,7 @@ public:
 	{
 		return !(*this == rhs);
 	}
+	// clamp to between 0.0 ~ 1.0
 	_Vec3&	Saturate()
 	{
 		x = std::min( 1.0f,std::max( 0.0f,x ) );
@@ -145,12 +146,14 @@ public:
 		z = std::min( 1.0f,std::max( 0.0f,z ) );
 		return *this;
 	}
+	// clamp to between 0.0 ~ 1.0
 	_Vec3	GetSaturated() const
 	{
 		_Vec3 temp( *this );
 		temp.Saturate();
 		return temp;
 	}
+	// x3 = x1 * x2 etc.
 	_Vec3&  Hadamard( const _Vec3& rhs )
 	{
 		x *= rhs.x;
@@ -158,6 +161,7 @@ public:
 		z *= rhs.z;
 		return *this;
 	}
+	// x3 = x1 * x2 etc.
 	_Vec3	GetHadamard( const _Vec3& rhs ) const
 	{
 		_Vec3 temp( *this );

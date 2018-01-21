@@ -250,3 +250,6 @@ ModelManifest.xml
 
 # Precompiled shader bytecode headers
 *.shh
+
+# .obj 3d model files unignore
+!Engine/models/*.obj

@@ -20,6 +20,7 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include "Sphere.h"
 #include "CubeSkinScene.h"
 #include "CubeVertexColorScene.h"
 #include "CubeSolidScene.h"
@@ -36,6 +37,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
+	scenes.push_back( std::make_unique<GeometryFlatScene>( gfx,Sphere::GetPlain<GeometryFlatScene::Vertex>() ) );
 	scenes.push_back( std::make_unique<VertexWaveScene>( gfx ) );
 	scenes.push_back( std::make_unique<GeometryFlatScene>( gfx,
 		IndexedTriangleList<GeometryFlatScene::Vertex>::Load( "models\\bunny.obj" ) ) );

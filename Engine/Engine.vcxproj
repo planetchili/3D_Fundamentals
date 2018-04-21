@@ -172,6 +172,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SolidEffect.h" />
     <ClInclude Include="SolidGeometryEffect.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="TextureEffect.h" />
     <ClInclude Include="tiny_obj_loader.h" />

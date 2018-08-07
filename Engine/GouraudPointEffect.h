@@ -4,7 +4,7 @@
 #include "DefaultGeometryShader.h"
 
 // flat shading with vertex normals
-class GouraudEffect
+class GouraudPointEffect
 {
 public:
 	// the vertex type that will be input into the pipeline
@@ -144,36 +144,43 @@ public:
 		}
 		Output operator()( const Vertex& v ) const
 		{
-			// calculate intensity based on angle of incidence
-			const auto d = diffuse * std::max( 0.0f,-(v.n * rotation) * dir );
+			// transform mech vertex position before lighting calc
+			const auto pos = v.pos * rotation + translation;
+			// vertex to light data
+			const auto v_to_l = light_pos - pos;
+			const auto dist = v_to_l.Len();
+			const auto dir = v_to_l / dist;
+			// calculate attenuation
+			const auto attenuation = 1.0f / 
+				(constant_attenuation + linear_attenuation * dist * quadradic_attenuation * sq( dist ));
+			// calculate intensity based on angle of incidence and attenuation
+			const auto d = light_diffuse * attenuation * std::max( 0.0f,(v.n * rotation) * dir );
 			// add diffuse+ambient, filter by material color, saturate and scale
-			const auto c = color.GetHadamard( d + ambient ).Saturate() * 255.0f;
-			return{ v.pos * rotation + translation,c };
+			const auto c = material_color.GetHadamard( d + light_ambient ).Saturate() * 255.0f;
+			return{ pos,c };
 		}
 		void SetDiffuseLight( const Vec3& c )
 		{
-			diffuse = { c.x,c.y,c.z };
+			light_diffuse = c;
 		}
 		void SetAmbientLight( const Vec3& c )
 		{
-			ambient = { c.x,c.y,c.z };
+			light_ambient = c;
 		}
-		void SetLightDirection( const Vec3& dl )
+		void SetLightPosition( const Vec3& pos_in )
 		{
-			assert( dl.LenSq() >= 0.001f );
-			dir = dl.GetNormalized();
-		}
-		void SetMaterialColor( Color c )
-		{
-			color = Vec3( c );
+			light_pos = pos_in;
 		}
 	private:
 		Mat3 rotation;
 		Vec3 translation;
-		Vec3 dir = { 0.0f,0.0f,1.0f };
-		Vec3 diffuse = { 1.0f,1.0f,1.0f };
-		Vec3 ambient = { 0.1f,0.1f,0.1f };
-		Vec3 color = { 0.8f,0.85f,1.0f };
+		Vec3 light_pos = { 0.0f,0.0f,0.5f };
+		Vec3 light_diffuse = { 1.0f,1.0f,1.0f };
+		Vec3 light_ambient = { 0.1f,0.1f,0.1f };
+		Vec3 material_color = { 0.8f,0.85f,1.0f };
+		float linear_attenuation = 1.0f;
+		float quadradic_attenuation = 2.619f;
+		float constant_attenuation = 0.382f;
 	};
 	// default gs passes vertices through and outputs triangle
 	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;

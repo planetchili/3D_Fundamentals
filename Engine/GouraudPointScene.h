@@ -18,8 +18,9 @@ public:
 	GouraudPointScene( Graphics& gfx,IndexedTriangleList<Vertex> tl )
 		:
 		itlist( std::move( tl ) ),
-		pipeline( gfx ),
-		liPipeline( gfx ),
+		pZb( std::make_shared<ZBuffer>( gfx.ScreenWidth,gfx.ScreenHeight ) ),
+		pipeline( gfx,pZb ),
+		liPipeline( gfx,pZb ),
 		Scene( "gouraud shader scene free mesh" )
 	{
 		itlist.AdjustToTrueCenter();
@@ -105,7 +106,9 @@ public:
 		// render triangles
 		pipeline.Draw( itlist );
 
-		liPipeline.BeginFrame();
+		// draw light indicator with different pipeline
+		// don't call beginframe on this pipeline b/c wanna keep zbuffer contents
+		// (don't like this assymetry but we'll live with it for now)
 		liPipeline.effect.vs.BindTranslation( { lpos_x,lpos_y,lpos_z } );
 		liPipeline.effect.vs.BindRotation( Mat3::Identity() );
 		liPipeline.Draw( lightIndicator );
@@ -113,6 +116,7 @@ public:
 private:
 	IndexedTriangleList<Vertex> itlist;
 	IndexedTriangleList<SolidEffect::Vertex> lightIndicator = Sphere::GetPlain<SolidEffect::Vertex>( 0.05f );
+	std::shared_ptr<ZBuffer> pZb;
 	Pipeline pipeline;
 	LightIndicatorPipeline liPipeline;
 	static constexpr float dTheta = PI;
@@ -123,5 +127,4 @@ private:
 	float lpos_x = 0.0f;
 	float lpos_y = 0.0f;
 	float lpos_z = 0.6f;
-
 };

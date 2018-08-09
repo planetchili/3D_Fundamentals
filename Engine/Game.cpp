@@ -39,6 +39,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
+	scenes.push_back( std::make_unique<GouraudPointScene>( gfx,Plane::GetNormals<GouraudPointScene::Vertex>( 1 ) ) );
 	scenes.push_back( std::make_unique<GouraudPointScene>( gfx,IndexedTriangleList<GouraudPointScene::Vertex>::LoadNormals( "models\\suzanne.obj" ) ) );
 	scenes.push_back( std::make_unique<GouraudScene>( gfx,IndexedTriangleList<GouraudScene::Vertex>::LoadNormals( "models\\suzanne.obj" ) ) );
 	scenes.push_back( std::make_unique<GouraudScene>( gfx,Sphere::GetPlainNormals<GouraudScene::Vertex>() ) );

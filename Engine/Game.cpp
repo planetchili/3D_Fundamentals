@@ -33,6 +33,7 @@
 #include "GouraudScene.h"
 #include "GouraudPointScene.h"
 #include "PhongPointScene.h"
+#include "SpecularPhonePointScene.h"
 #include <sstream>
 
 Game::Game( MainWindow& wnd )
@@ -40,6 +41,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
+	scenes.push_back( std::make_unique<SpecularPhongPointScene>( gfx,IndexedTriangleList<SpecularPhongPointScene::Vertex>::LoadNormals( "models\\suzanne.obj" ) ) );
 	scenes.push_back( std::make_unique<PhongPointScene>( gfx,IndexedTriangleList<PhongPointScene::Vertex>::LoadNormals( "models\\suzanne.obj" ) ) );
 	scenes.push_back( std::make_unique<PhongPointScene>( gfx,Plane::GetNormals<PhongPointScene::Vertex>( 16 ) ) );
 	scenes.push_back( std::make_unique<GouraudPointScene>( gfx,Plane::GetNormals<GouraudPointScene::Vertex>( 16 ) ) );

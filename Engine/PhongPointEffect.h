@@ -144,7 +144,7 @@ public:
 			const auto attenuation = 1.0f /
 				(constant_attenuation + linear_attenuation * dist + quadradic_attenuation * sq( dist ));
 			// calculate intensity based on angle of incidence and attenuation
-			const auto d = light_diffuse * attenuation * std::max( 0.0f,in.n * dir );
+			const auto d = light_diffuse * attenuation * std::max( 0.0f,in.n.GetNormalized() * dir );
 			// add diffuse+ambient, filter by material color, saturate and scale
 			return Color( material_color.GetHadamard( d + light_ambient ).Saturate() * 255.0f );
 		}

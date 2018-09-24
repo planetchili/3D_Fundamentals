@@ -21,6 +21,7 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include "ChiliException.h"
+#include "Mat.h"
 
 int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR pArgs,INT )
 {

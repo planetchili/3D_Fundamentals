@@ -21,6 +21,7 @@
 #pragma once
 
 #include "Vec3.h"
+#include "Vec4.h"
 
 template <typename T,size_t S>
 class _Mat
@@ -205,10 +206,10 @@ public:
 		if constexpr( S == 4 )
 		{
 			return {
-				(T)1.0,(T)0.0,(T)0.0,x,
-				(T)0.0,(T)1.0,(T)0.0,y,
-				(T)0.0,(T)0.0,(T)1.0,z,
-				(T)0.0,(T)0.0,(T)0.0,(T)1.0
+				(T)1.0,(T)0.0,(T)0.0,(T)0.0,
+				(T)0.0,(T)1.0,(T)0.0,(T)0.0,
+				(T)0.0,(T)0.0,(T)1.0,(T)0.0,
+				x,     y,      z,    (T)1.0
 			};
 		}
 		else
@@ -234,6 +235,23 @@ _Vec3<T> operator*( const _Vec3<T>& lhs,const _Mat<T,3>& rhs )
 		lhs.x * rhs.elements[0][0] + lhs.y * rhs.elements[1][0] + lhs.z * rhs.elements[2][0],
 		lhs.x * rhs.elements[0][1] + lhs.y * rhs.elements[1][1] + lhs.z * rhs.elements[2][1],
 		lhs.x * rhs.elements[0][2] + lhs.y * rhs.elements[1][2] + lhs.z * rhs.elements[2][2]
+	};
+}
+
+template<typename T>
+_Vec4<T>& operator*=( _Vec4<T>& lhs,const _Mat<T,4>& rhs )
+{
+	return lhs = lhs * rhs;
+}
+
+template<typename T>
+_Vec4<T> operator*( const _Vec4<T>& lhs,const _Mat<T,4>& rhs )
+{
+	return{
+		lhs.x * rhs.elements[0][0] + lhs.y * rhs.elements[1][0] + lhs.z * rhs.elements[2][0] + lhs.w * rhs.elements[3][0],
+		lhs.x * rhs.elements[0][1] + lhs.y * rhs.elements[1][1] + lhs.z * rhs.elements[2][1] + lhs.w * rhs.elements[3][1],
+		lhs.x * rhs.elements[0][2] + lhs.y * rhs.elements[1][2] + lhs.z * rhs.elements[2][2] + lhs.w * rhs.elements[3][2],
+		lhs.x * rhs.elements[0][3] + lhs.y * rhs.elements[1][3] + lhs.z * rhs.elements[2][3] + lhs.w * rhs.elements[3][3]
 	};
 }
 

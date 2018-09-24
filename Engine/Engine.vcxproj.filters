@@ -198,6 +198,9 @@
     <ClInclude Include="Mat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Vec4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">

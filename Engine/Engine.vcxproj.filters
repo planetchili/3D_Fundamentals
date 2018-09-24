@@ -69,9 +69,6 @@
     <ClInclude Include="Rect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mat2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ChiliMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -79,9 +76,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vec3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mat3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PubeScreenTransformer.h">
@@ -200,6 +194,9 @@
     </ClInclude>
     <ClInclude Include="SpecularPhonePointScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Mat.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

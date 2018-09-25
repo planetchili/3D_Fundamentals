@@ -100,27 +100,22 @@ public:
 				return Output( *this ) /= rhs;
 			}
 		public:
-			Vec3 pos;
-			Vec3 n;
+			Vec4 pos;
+			Vec4 n;
 			Vec3 worldPos;
 		};
 	public:
-		void BindRotation( const Mat3& rotation_in )
+		void BindTransformation( const Mat4& transformation_in )
 		{
-			rotation = rotation_in;
-		}
-		void BindTranslation( const Vec3& translation_in )
-		{
-			translation = translation_in;
+			transformation = transformation_in;
 		}
 		Output operator()( const Vertex& v ) const
 		{
-			const auto pos = v.pos * rotation + translation;
-			return{ pos,v.n * rotation,pos };
+			const auto pt = Vec4( v.pos ) * transformation;
+			return{ pt,Vec4( v.n,0.0f ) * transformation,pt };
 		}
 	private:
-		Mat3 rotation;
-		Vec3 translation;
+		Mat4 transformation;
 	};
 	// default gs passes vertices through and outputs triangle
 	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;

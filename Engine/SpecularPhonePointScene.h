@@ -92,16 +92,13 @@ public:
 	virtual void Draw() override
 	{
 		pipeline.BeginFrame();
-		// generate rotation matrix from euler angles
-		// translation from offset
-		const Mat3 rot =
-			Mat3::RotationX( theta_x ) *
-			Mat3::RotationY( theta_y ) *
-			Mat3::RotationZ( theta_z );
-		const Vec3 trans = { 0.0f,0.0f,offset_z };
 		// set pipeline transform
-		pipeline.effect.vs.BindRotation( rot );
-		pipeline.effect.vs.BindTranslation( trans );
+		pipeline.effect.vs.BindTransformation(
+			Mat4::RotationX( theta_x ) *
+			Mat4::RotationY( theta_y ) *
+			Mat4::RotationZ( theta_z ) * 
+			Mat4::Translation( 0.0f,0.0f,offset_z )
+		);
 		pipeline.effect.ps.SetLightPosition( { lpos_x,lpos_y,lpos_z } );
 		// render triangles
 		pipeline.Draw( itlist );

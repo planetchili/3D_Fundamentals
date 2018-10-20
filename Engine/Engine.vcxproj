@@ -175,7 +175,7 @@
     <ClInclude Include="PhongPointScene.h" />
     <ClInclude Include="Pipeline.h" />
     <ClInclude Include="Plane.h" />
-    <ClInclude Include="PubeScreenTransformer.h" />
+    <ClInclude Include="NDCScreenTransformer.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
@@ -185,6 +185,7 @@
     <ClInclude Include="SpecularPhongPointEffect.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="TestTriangle.h" />
     <ClInclude Include="TextureEffect.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="Triangle.h" />
@@ -278,6 +279,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Chili.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="NatvisFile.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

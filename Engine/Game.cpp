@@ -34,7 +34,7 @@
 //#include "GouraudScene.h"
 //#include "GouraudPointScene.h"
 //#include "PhongPointScene.h"
-#include "SpecularPhonePointScene.h"
+#include "SpecularPhongPointScene.h"
 #include <sstream>
 
 Game::Game( MainWindow& wnd )

@@ -28,6 +28,12 @@
     <Filter Include="Header Files\Effects\Shaders">
       <UniqueIdentifier>{deba1b6f-037b-49f6-92bd-065e2cb0aff7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scenes\Defunct">
+      <UniqueIdentifier>{3923dce5-83de-4ce0-9336-77ef50392e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Effects\Defunct">
+      <UniqueIdentifier>{002b9588-6ee9-40ac-8ac3-88d9c5543635}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliWin.h">
@@ -96,27 +102,6 @@
     <ClInclude Include="Triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CubeSkinScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeVertexColorScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexColorEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeSolidScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="SolidEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="DoubleCubeScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="ZBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -126,38 +111,11 @@
     <ClInclude Include="Plane.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="VertexWaveScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="WaveVertexTextureEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexPositionColorEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeVertexPositionColorScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="DefaultGeometryShader.h">
       <Filter>Header Files\Effects\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="SolidGeometryEffect.h">
       <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeSolidGeometryScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexFlatEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeFlatIndependentScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="GeometryFlatEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="GeometryFlatScene.h">
-      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="tiny_obj_loader.h">
       <Filter>Header Files</Filter>
@@ -168,29 +126,8 @@
     <ClInclude Include="Sphere.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="GouraudEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="GouraudScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="GouraudPointEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="GouraudPointScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="PhongPointEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="PhongPointScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="SpecularPhongPointEffect.h">
       <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="SpecularPhonePointScene.h">
-      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Mat.h">
       <Filter>Header Files</Filter>
@@ -203,6 +140,75 @@
     </ClInclude>
     <ClInclude Include="TestTriangle.h">
       <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryFlatEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongPointEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="GouraudPointEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="GouraudEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexColorEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexFlatEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexPositionColorEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveVertexTextureEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongPointScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="GouraudScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="GouraudPointScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryFlatScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="DoubleCubeScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeVertexPositionColorScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeVertexColorScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSolidScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSolidGeometryScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSkinScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeFlatIndependentScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexWaveScene.h">
+      <Filter>Header Files\Scenes\Defunct</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecularPhongPointScene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

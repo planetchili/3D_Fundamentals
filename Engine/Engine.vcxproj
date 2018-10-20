@@ -181,7 +181,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SolidEffect.h" />
     <ClInclude Include="SolidGeometryEffect.h" />
-    <ClInclude Include="SpecularPhonePointScene.h" />
+    <ClInclude Include="SpecularPhongPointScene.h" />
     <ClInclude Include="SpecularPhongPointEffect.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Surface.h" />

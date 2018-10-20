@@ -233,6 +233,25 @@ public:
 			static_assert(false,"Bad dimensionality");
 		}
 	}
+	constexpr static _Mat ProjectionHFOV( T fov,T ar,T n,T f )
+	{
+		if constexpr( S == 4 )
+		{
+			const auto fov_rad = fov * (T)PI / (T)180.0;
+			const auto w = (T)1.0f / std::tan( fov_rad / (T)2.0 );
+			const auto h = w * ar;
+			return {
+				w,		(T)0.0,	(T)0.0,				(T)0.0,
+				(T)0.0,	h,		(T)0.0,				(T)0.0,
+				(T)0.0,	(T)0.0,	f / (f - n),		(T)1.0,
+				(T)0.0,	(T)0.0,	-n * f / (f - n),	(T)0.0,
+			};
+		}
+		else
+		{
+			static_assert(false,"Bad dimensionality");
+		}
+	}
 public:
 	// [ row ][ col ]
 	T elements[S][S];

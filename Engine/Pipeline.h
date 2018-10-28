@@ -85,8 +85,39 @@ private:
 	void ProcessTriangle( const VSOut& v0,const VSOut& v1,const VSOut& v2,size_t triangle_index )
 	{
 		// generate triangle from 3 vertices using gs
-		// and send to post-processing
-		PostProcessTriangleVertices( effect.gs( v0,v1,v2,triangle_index ) );
+		// and send to clipper
+		ClipCullTriangle( effect.gs( v0,v1,v2,triangle_index ) );
+	}
+
+	void ClipCullTriangle( Triangle<GSOut>& t )
+	{
+		// cull tests
+		if( std::abs( t.v0.pos.x ) > t.v0.pos.w &&
+			std::abs( t.v1.pos.x ) > t.v1.pos.w &&
+			std::abs( t.v2.pos.x ) > t.v2.pos.w )
+		{
+			return;
+		}
+		if( std::abs( t.v0.pos.y ) > t.v0.pos.w &&
+			std::abs( t.v1.pos.y ) > t.v1.pos.w &&
+			std::abs( t.v2.pos.y ) > t.v2.pos.w )
+		{
+			return;
+		}
+		if( t.v0.pos.z > t.v0.pos.w &&
+			t.v1.pos.z > t.v1.pos.w &&
+			t.v2.pos.z > t.v2.pos.w )
+		{
+			return;
+		}
+		if( t.v0.pos.z < 0.0f &&
+			t.v1.pos.z < 0.0f &&
+			t.v2.pos.z < 0.0f )
+		{
+			return;
+		}
+
+		PostProcessTriangleVertices( t );
 	}
 	// vertex post-processing function
 	// perform perspective and viewport transformations

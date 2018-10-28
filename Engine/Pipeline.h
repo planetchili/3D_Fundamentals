@@ -117,7 +117,66 @@ private:
 			return;
 		}
 
-		PostProcessTriangleVertices( t );
+		// clipping routines
+		const auto Clip1 = [this]( GSOut& v0,GSOut& v1,GSOut& v2 )
+		{
+			// calculate alpha values for getting adjusted vertices
+			const float alphaA = (-v0.pos.z) / (v1.pos.z - v0.pos.z);
+			const float alphaB = (-v0.pos.z) / (v2.pos.z - v0.pos.z);
+			// interpolate to get v0a and v0b
+			const auto v0a = interpolate( v0,v1,alphaA );
+			const auto v0b = interpolate( v0,v2,alphaB );
+			// draw triangles
+			PostProcessTriangleVertices( Triangle<GSOut>{ v0a,v1,v2 } );
+			PostProcessTriangleVertices( Triangle<GSOut>{ v0b,v0a,v2 } );
+		};
+		const auto Clip2 = [this]( GSOut& v0,GSOut& v1,GSOut& v2 )
+		{
+			// calculate alpha values for getting adjusted vertices
+			const float alpha0 = (-v0.pos.z) / (v2.pos.z - v0.pos.z);
+			const float alpha1 = (-v1.pos.z) / (v2.pos.z - v1.pos.z);
+			// interpolate to get v0a and v0b
+			v0 = interpolate( v0,v2,alpha0 );
+			v1 = interpolate( v1,v2,alpha1 );
+			// draw triangles
+			PostProcessTriangleVertices( Triangle<GSOut>{ v0,v1,v2 } );
+		};
+
+		// near clipping tests
+		if( t.v0.pos.z < 0.0f )
+		{
+			if( t.v1.pos.z < 0.0f )
+			{
+				Clip2( t.v0,t.v1,t.v2 );
+			}
+			else if( t.v2.pos.z < 0.0f )
+			{
+				Clip2( t.v0,t.v2,t.v1 );
+			}
+			else
+			{
+				Clip1( t.v0,t.v1,t.v2 );
+			}
+		}
+		else if( t.v1.pos.z < 0.0f )
+		{
+			if( t.v2.pos.z < 0.0f )
+			{
+				Clip2( t.v1,t.v2,t.v0 );
+			}
+			else
+			{
+				Clip1( t.v1,t.v0,t.v2 );
+			}
+		}
+		else if( t.v2.pos.z < 0.0f )
+		{
+			Clip1( t.v2,t.v0,t.v1 );
+		}
+		else // no near clipping necessary
+		{
+			PostProcessTriangleVertices( t );
+		}
 	}
 	// vertex post-processing function
 	// perform perspective and viewport transformations

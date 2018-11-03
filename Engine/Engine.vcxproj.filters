@@ -111,12 +111,6 @@
     <ClInclude Include="Plane.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultGeometryShader.h">
-      <Filter>Header Files\Effects\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="SolidGeometryEffect.h">
-      <Filter>Header Files\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="tiny_obj_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -142,9 +136,6 @@
       <Filter>Header Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="GeometryFlatEffect.h">
-      <Filter>Header Files\Effects\Defunct</Filter>
-    </ClInclude>
-    <ClInclude Include="SolidEffect.h">
       <Filter>Header Files\Effects\Defunct</Filter>
     </ClInclude>
     <ClInclude Include="PhongPointEffect.h">
@@ -209,6 +200,15 @@
     </ClInclude>
     <ClInclude Include="SpecularPhongPointScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultGeometryShader.h">
+      <Filter>Header Files\Effects\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidGeometryEffect.h">
+      <Filter>Header Files\Effects\Defunct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

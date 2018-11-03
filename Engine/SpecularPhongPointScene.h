@@ -82,24 +82,33 @@ public:
 		}
 		if( kbd.KeyIsPressed( 'R' ) )
 		{
-			offset_z += 0.2f * dt;
+			offset_z += 0.7f * dt;
 		}
 		if( kbd.KeyIsPressed( 'F' ) )
 		{
-			offset_z -= 0.2f * dt;
+			offset_z -= 0.7f * dt;
+		}
+		if( kbd.KeyIsPressed( 'N' ) )
+		{
+			phi -= 1.8f * dt;
+		}
+		if( kbd.KeyIsPressed( 'M' ) )
+		{
+			phi += 1.8f * dt;
 		}
 	}
 	virtual void Draw() override
 	{
 		pipeline.BeginFrame();
 
-		const auto proj = Mat4::ProjectionHFOV( 100.0f,1.33333f,1.0f,10.0f );
+		const auto proj = Mat4::ProjectionHFOV( 100.0f,1.33333f,0.5f,4.0f );
 		// set pipeline transform
 		pipeline.effect.vs.BindWorld(
 			Mat4::RotationX( theta_x ) *
 			Mat4::RotationY( theta_y ) *
 			Mat4::RotationZ( theta_z ) * 
-			Mat4::Translation( 0.0f,0.0f,offset_z )
+			Mat4::Translation( 0.0f,0.0f,offset_z ) *
+			Mat4::RotationY( phi )
 		);
 		pipeline.effect.vs.BindProjection( proj );
 		pipeline.effect.ps.SetLightPosition( { lpos_x,lpos_y,lpos_z } );
@@ -127,4 +136,5 @@ private:
 	float lpos_x = 0.0f;
 	float lpos_y = 0.0f;
 	float lpos_z = 0.6f;
+	float phi = 0.0f;
 };

@@ -210,6 +210,9 @@
     <ClInclude Include="SolidGeometryEffect.h">
       <Filter>Header Files\Effects\Defunct</Filter>
     </ClInclude>
+    <ClInclude Include="MouseTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">

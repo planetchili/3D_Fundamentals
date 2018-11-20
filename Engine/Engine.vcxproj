@@ -171,6 +171,7 @@
     <ClInclude Include="Mat.h" />
     <ClInclude Include="Miniball.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="MouseTracker.h" />
     <ClInclude Include="PhongPointEffect.h" />
     <ClInclude Include="PhongPointScene.h" />
     <ClInclude Include="Pipeline.h" />

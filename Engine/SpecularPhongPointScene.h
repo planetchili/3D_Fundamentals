@@ -24,7 +24,7 @@ public:
 		Scene( "phong point shader scene free mesh" )
 	{
 		itlist.AdjustToTrueCenter();
-		offset_z = itlist.GetRadius() * 1.6f;
+		mod_pos.z = itlist.GetRadius() * 1.6f;
 		for( auto& v : lightIndicator.vertices )
 		{
 			v.color = Colors::White;
@@ -32,93 +32,46 @@ public:
 	}
 	virtual void Update( Keyboard& kbd,Mouse& mouse,float dt ) override
 	{
-		if( kbd.KeyIsPressed( 'Q' ) )
-		{
-			theta_x = wrap_angle( theta_x + dTheta * dt );
-		}
 		if( kbd.KeyIsPressed( 'W' ) )
 		{
-			theta_y = wrap_angle( theta_y + dTheta * dt );
-		}
-		if( kbd.KeyIsPressed( 'E' ) )
-		{
-			theta_z = wrap_angle( theta_z + dTheta * dt );
+			cam_pos.z += cam_speed * dt;
 		}
 		if( kbd.KeyIsPressed( 'A' ) )
 		{
-			theta_x = wrap_angle( theta_x - dTheta * dt );
+			cam_pos.x -= cam_speed * dt;
 		}
 		if( kbd.KeyIsPressed( 'S' ) )
 		{
-			theta_y = wrap_angle( theta_y - dTheta * dt );
+			cam_pos.z -= cam_speed * dt;
 		}
 		if( kbd.KeyIsPressed( 'D' ) )
 		{
-			theta_z = wrap_angle( theta_z - dTheta * dt );
-		}
-		if( kbd.KeyIsPressed( 'U' ) )
-		{
-			lpos_x += 0.2f * dt;
-		}
-		if( kbd.KeyIsPressed( 'I' ) )
-		{
-			lpos_y += 0.2f * dt;
-		}
-		if( kbd.KeyIsPressed( 'O' ) )
-		{
-			lpos_z += 0.2f * dt;
-		}
-		if( kbd.KeyIsPressed( 'J' ) )
-		{
-			lpos_x -= 0.2f * dt;
-		}
-		if( kbd.KeyIsPressed( 'K' ) )
-		{
-			lpos_y -= 0.2f * dt;
-		}
-		if( kbd.KeyIsPressed( 'L' ) )
-		{
-			lpos_z -= 0.2f * dt;
-		}
-		if( kbd.KeyIsPressed( 'R' ) )
-		{
-			offset_z += 0.7f * dt;
-		}
-		if( kbd.KeyIsPressed( 'F' ) )
-		{
-			offset_z -= 0.7f * dt;
-		}
-		if( kbd.KeyIsPressed( 'N' ) )
-		{
-			phi -= 1.8f * dt;
-		}
-		if( kbd.KeyIsPressed( 'M' ) )
-		{
-			phi += 1.8f * dt;
-		}
+			cam_pos.x += cam_speed * dt;
+		}		
 	}
 	virtual void Draw() override
 	{
 		pipeline.BeginFrame();
 
-		const auto proj = Mat4::ProjectionHFOV( 100.0f,1.33333f,0.5f,4.0f );
+		const auto proj = Mat4::ProjectionHFOV( hfov,aspect_ratio,0.5f,4.0f );
+		const auto view = Mat4::Translation( -cam_pos );
 		// set pipeline transform
 		pipeline.effect.vs.BindWorld(
 			Mat4::RotationX( theta_x ) *
 			Mat4::RotationY( theta_y ) *
 			Mat4::RotationZ( theta_z ) * 
-			Mat4::Translation( 0.0f,0.0f,offset_z ) *
-			Mat4::RotationY( phi )
+			Mat4::Translation( mod_pos )
 		);
+		pipeline.effect.vs.BindView( view );
 		pipeline.effect.vs.BindProjection( proj );
-		pipeline.effect.ps.SetLightPosition( { lpos_x,lpos_y,lpos_z } );
+		pipeline.effect.ps.SetLightPosition( l_pos );
 		// render triangles
 		pipeline.Draw( itlist );
 
 		// draw light indicator with different pipeline
 		// don't call beginframe on this pipeline b/c wanna keep zbuffer contents
 		// (don't like this assymetry but we'll live with it for now)
-		liPipeline.effect.vs.BindWorld( Mat4::Translation( lpos_x,lpos_y,lpos_z ) );
+		liPipeline.effect.vs.BindWorldView( Mat4::Translation( l_pos ) * view );
 		liPipeline.effect.vs.BindProjection( proj );
 		liPipeline.Draw( lightIndicator );
 	}
@@ -128,13 +81,20 @@ private:
 	std::shared_ptr<ZBuffer> pZb;
 	Pipeline pipeline;
 	LightIndicatorPipeline liPipeline;
-	static constexpr float dTheta = PI;
-	float offset_z = 2.0f;
+	// fov
+	static constexpr float aspect_ratio = 1.33333f;
+	static constexpr float hfov = 95.0f;
+	static constexpr float vfov = hfov / aspect_ratio;
+	// camera stuff
+	static constexpr float htrack = hfov / (float)Graphics::ScreenWidth;
+	static constexpr float vtrack = vfov / (float)Graphics::ScreenHeight;
+	static constexpr float cam_speed = 1.0f;
+	Vec3 cam_pos = { 0.0f,0.0f,0.0f };
+	// model stuff
+	Vec3 mod_pos = { 0.0f,0.0f,2.0f };
 	float theta_x = 0.0f;
 	float theta_y = 0.0f;
 	float theta_z = 0.0f;
-	float lpos_x = 0.0f;
-	float lpos_y = 0.0f;
-	float lpos_z = 0.6f;
-	float phi = 0.0f;
+	// light stuff
+	Vec3 l_pos = { 0.0f,0.0f,0.6f };
 };

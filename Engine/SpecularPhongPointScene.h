@@ -83,12 +83,12 @@ public:
 		pipeline.effect.vs.BindWorld(
 			Mat4::RotationX( theta_x ) *
 			Mat4::RotationY( theta_y ) *
-			Mat4::RotationZ( theta_z ) * 
+			Mat4::RotationZ( theta_z ) *
 			Mat4::Translation( mod_pos )
 		);
 		pipeline.effect.vs.BindView( view );
 		pipeline.effect.vs.BindProjection( proj );
-		pipeline.effect.ps.SetLightPosition( l_pos );
+		pipeline.effect.ps.SetLightPosition( l_pos * view );
 		// render triangles
 		pipeline.Draw( itlist );
 
@@ -122,5 +122,5 @@ private:
 	float theta_y = 0.0f;
 	float theta_z = 0.0f;
 	// light stuff
-	Vec3 l_pos = { 0.0f,0.0f,0.6f };
+	Vec4 l_pos = { 0.0f,0.0f,0.6f,1.0f };
 };

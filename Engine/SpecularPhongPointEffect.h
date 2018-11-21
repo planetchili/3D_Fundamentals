@@ -129,7 +129,7 @@ public:
 		Output operator()( const Vertex& v ) const
 		{
 			const auto p4 = Vec4( v.pos );
-			return { p4 * worldViewProj,Vec4{ v.n,0.0f } * worldView,p4 * world };
+			return { p4 * worldViewProj,Vec4{ v.n,0.0f } * worldView,p4 * worldView };
 		}
 	private:
 		Mat4 world = Mat4::Identity();

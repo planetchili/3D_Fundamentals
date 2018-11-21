@@ -69,6 +69,18 @@ public:
 		}
 		return result;
 	}
+	_Mat operator!() const
+	{
+		_Mat xp;
+		for( size_t j = 0; j < S; j++ )
+		{
+			for( size_t k = 0; k < S; k++ )
+			{
+				xp.elements[j][k] = elements[k][j];
+			}
+		}
+		return xp;
+	}
 	constexpr static _Mat Identity()
 	{
 		if constexpr( S == 3 )

@@ -35,19 +35,19 @@ public:
 	{
 		if( kbd.KeyIsPressed( 'W' ) )
 		{
-			cam_pos.z += cam_speed * dt;
+			cam_pos += Vec4{ 0.0f,0.0f,1.0f,0.0f } * !cam_rot_inv * cam_speed * dt;
 		}
 		if( kbd.KeyIsPressed( 'A' ) )
 		{
-			cam_pos.x -= cam_speed * dt;
+			cam_pos += Vec4{ -1.0f,0.0f,0.0f,0.0f } * !cam_rot_inv * cam_speed * dt;
 		}
 		if( kbd.KeyIsPressed( 'S' ) )
 		{
-			cam_pos.z -= cam_speed * dt;
+			cam_pos += Vec4{ 0.0f,0.0f,-1.0f,0.0f } * !cam_rot_inv * cam_speed * dt;
 		}
 		if( kbd.KeyIsPressed( 'D' ) )
 		{
-			cam_pos.x += cam_speed * dt;
+			cam_pos += Vec4{ 1.0f,0.0f,0.0f,0.0f } * !cam_rot_inv * cam_speed * dt;
 		}
 
 		while( !mouse.IsEmpty() )
@@ -65,7 +65,7 @@ public:
 				if( mt.Engaged() )
 				{
 					const auto delta = mt.Move( e.GetPos() );
-					cam_rot = cam_rot
+					cam_rot_inv = cam_rot_inv
 						* Mat4::RotationY( (float)-delta.x * htrack )
 						* Mat4::RotationX( (float)-delta.y * vtrack );
 				}
@@ -78,7 +78,7 @@ public:
 		pipeline.BeginFrame();
 
 		const auto proj = Mat4::ProjectionHFOV( hfov,aspect_ratio,0.5f,4.0f );
-		const auto view = Mat4::Translation( -cam_pos ) * cam_rot;
+		const auto view = Mat4::Translation( -cam_pos ) * cam_rot_inv;
 		// set pipeline transform
 		pipeline.effect.vs.BindWorld(
 			Mat4::RotationX( theta_x ) *
@@ -115,7 +115,7 @@ private:
 	static constexpr float vtrack = to_rad( vfov ) / (float)Graphics::ScreenHeight;
 	static constexpr float cam_speed = 1.0f;
 	Vec3 cam_pos = { 0.0f,0.0f,0.0f };
-	Mat4 cam_rot = Mat4::Identity();
+	Mat4 cam_rot_inv = Mat4::Identity();
 	// model stuff
 	Vec3 mod_pos = { 0.0f,0.0f,2.0f };
 	float theta_x = 0.0f;

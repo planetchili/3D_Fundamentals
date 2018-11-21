@@ -49,6 +49,22 @@ public:
 		{
 			cam_pos += Vec4{ 1.0f,0.0f,0.0f,0.0f } * !cam_rot_inv * cam_speed * dt;
 		}
+		if( kbd.KeyIsPressed( 'C' ) )
+		{
+			cam_pos += Vec4{ 0.0f,1.0f,0.0f,0.0f } * !cam_rot_inv * cam_speed * dt;
+		}
+		if( kbd.KeyIsPressed( 'Z' ) )
+		{
+			cam_pos += Vec4{ 0.0f,-1.0f,0.0f,0.0f } * !cam_rot_inv * cam_speed * dt;
+		}
+		if( kbd.KeyIsPressed( 'Q' ) )
+		{
+			cam_rot_inv = cam_rot_inv * Mat4::RotationZ( cam_roll_speed * dt );
+		}
+		if( kbd.KeyIsPressed( 'E' ) )
+		{
+			cam_rot_inv = cam_rot_inv * Mat4::RotationZ( -cam_roll_speed * dt );
+		}
 
 		while( !mouse.IsEmpty() )
 		{
@@ -114,6 +130,7 @@ private:
 	static constexpr float htrack = to_rad( hfov ) / (float)Graphics::ScreenWidth;
 	static constexpr float vtrack = to_rad( vfov ) / (float)Graphics::ScreenHeight;
 	static constexpr float cam_speed = 1.0f;
+	static constexpr float cam_roll_speed = PI;
 	Vec3 cam_pos = { 0.0f,0.0f,0.0f };
 	Mat4 cam_rot_inv = Mat4::Identity();
 	// model stuff

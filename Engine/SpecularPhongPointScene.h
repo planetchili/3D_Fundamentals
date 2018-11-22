@@ -96,13 +96,13 @@ public:
 		const auto proj = Mat4::ProjectionHFOV( hfov,aspect_ratio,0.5f,4.0f );
 		const auto view = Mat4::Translation( -cam_pos ) * cam_rot_inv;
 		// set pipeline transform
-		pipeline.effect.vs.BindWorld(
+		pipeline.effect.vs.BindWorldView(
 			Mat4::RotationX( theta_x ) *
 			Mat4::RotationY( theta_y ) *
 			Mat4::RotationZ( theta_z ) *
-			Mat4::Translation( mod_pos )
+			Mat4::Translation( mod_pos ) *
+			view
 		);
-		pipeline.effect.vs.BindView( view );
 		pipeline.effect.vs.BindProjection( proj );
 		pipeline.effect.ps.SetLightPosition( l_pos * view );
 		// render triangles

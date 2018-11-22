@@ -213,6 +213,9 @@
     <ClInclude Include="BaseVertexShader.h">
       <Filter>Header Files\Effects\Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="BasePhongShader.h">
+      <Filter>Header Files\Effects\Shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">

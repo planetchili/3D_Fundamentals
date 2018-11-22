@@ -3,6 +3,7 @@
 #include "Pipeline.h"
 #include "BaseVertexShader.h"
 #include "DefaultGeometryShader.h"
+#include "BasePhongShader.h"
 
 // flat shading with vertex normals
 class SpecularPhongPointEffect
@@ -117,55 +118,16 @@ public:
 	// takes an input of attributes that are the
 	// result of interpolating vertex attributes
 	// and outputs a color
-	class PixelShader
+	class PixelShader : public BasePhongShader<>
 	{
 	public:
 		template<class Input>
 		Color operator()( const Input& in ) const
 		{
-			// re-normalize interpolated surface normal
-			const auto surf_norm = in.n.GetNormalized();
-			// vertex to light data
-			const auto v_to_l = light_pos - in.worldPos;
-			const auto dist = v_to_l.Len();
-			const auto dir = v_to_l / dist;
-			// calculate attenuation
-			const auto attenuation = 1.0f /
-				(constant_attenuation + linear_attenuation * dist + quadradic_attenuation * sq( dist ));
-			// calculate intensity based on angle of incidence and attenuation
-			const auto d = light_diffuse * attenuation * std::max( 0.0f,surf_norm * dir );
-			// reflected light vector
-			const auto w = surf_norm * (v_to_l * surf_norm);
-			const auto r = w * 2.0f - v_to_l;
-			// calculate specular intensity based on angle between viewing vector and reflection vector, narrow with power function
-			const auto s = light_diffuse * specular_intensity * std::pow( std::max( 0.0f,-r.GetNormalized() * in.worldPos.GetNormalized() ),specular_power );
-			// add diffuse+ambient, filter by material color, saturate and scale
-			return Color( material_color.GetHadamard( d + light_ambient + s ).Saturate() * 255.0f );
-		}
-		void SetDiffuseLight( const Vec3& c )
-		{
-			light_diffuse = c;
-		}
-		void SetAmbientLight( const Vec3& c )
-		{
-			light_ambient = c;
-		}
-		void SetLightPosition( const Vec3& pos_in )
-		{
-			light_pos = pos_in;
+			return Shade( in,material_color );
 		}
 	private:
-		Vec3 light_pos = { 0.0f,0.0f,0.5f };
-		Vec3 light_diffuse = { 1.0f,1.0f,1.0f };
-		Vec3 light_ambient = { 0.1f,0.1f,0.1f };
 		Vec3 material_color = { 0.8f,0.85f,1.0f };
-		// diffuse
-		float linear_attenuation = 1.0f;
-		float quadradic_attenuation = 2.619f;
-		float constant_attenuation = 0.382f;
-		// specular
-		float specular_power = 30.0f;
-		float specular_intensity = 0.6f;
 	};
 public:
 	VertexShader vs;

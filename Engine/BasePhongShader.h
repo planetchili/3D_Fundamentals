@@ -1,6 +1,6 @@
 #pragma once
 #include "Colors.h"
-#include "Vec4.h"
+#include "Vec3.h"
 
 struct DefaultPointDiffuseParams
 {
@@ -20,7 +20,7 @@ class BasePhongShader
 {
 public:
 	template<class Input>
-	Color Shade( const Input& in,const Vec4& material_color ) const
+	Color Shade( const Input& in,const Vec3& material_color ) const
 	{
 		// re-normalize interpolated surface normal
 		const auto surf_norm = in.n.GetNormalized();

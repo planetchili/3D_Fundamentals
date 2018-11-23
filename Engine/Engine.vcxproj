@@ -196,6 +196,7 @@
     <ClInclude Include="Vec4.h" />
     <ClInclude Include="VertexColorEffect.h" />
     <ClInclude Include="VertexFlatEffect.h" />
+    <ClInclude Include="VertexLightTexturedEffect.h" />
     <ClInclude Include="VertexPositionColorEffect.h" />
     <ClInclude Include="VertexWaveScene.h" />
     <ClInclude Include="WaveVertexTextureEffect.h" />

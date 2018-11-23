@@ -8,12 +8,15 @@
 #include "SolidEffect.h"
 #include "Sphere.h"
 #include "MouseTracker.h"
+#include "VertexLightTexturedEffect.h"
+#include "Plane.h"
 
 class SpecularPhongPointScene : public Scene
 {
 public:
 	typedef ::Pipeline<SpecularPhongPointEffect> Pipeline;
 	typedef ::Pipeline<SolidEffect> LightIndicatorPipeline;
+	typedef ::Pipeline<VertexLightTexturedEffect> WallPipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
 	SpecularPhongPointScene( Graphics& gfx,IndexedTriangleList<Vertex> tl )
@@ -22,6 +25,7 @@ public:
 		pZb( std::make_shared<ZBuffer>( gfx.ScreenWidth,gfx.ScreenHeight ) ),
 		pipeline( gfx,pZb ),
 		liPipeline( gfx,pZb ),
+		wPipeline( gfx,pZb ),
 		Scene( "phong point shader scene free mesh" )
 	{
 		itlist.AdjustToTrueCenter();
@@ -30,6 +34,7 @@ public:
 		{
 			v.color = Colors::White;
 		}
+		wPipeline.effect.ps.BindTexture( L"images\\ceiling.jpg" );
 	}
 	virtual void Update( Keyboard& kbd,Mouse& mouse,float dt ) override
 	{
@@ -114,13 +119,20 @@ public:
 		liPipeline.effect.vs.BindWorldView( Mat4::Translation( l_pos ) * view );
 		liPipeline.effect.vs.BindProjection( proj );
 		liPipeline.Draw( lightIndicator );
+
+		wPipeline.effect.vs.BindWorldView( Mat4::Translation( 0.0f,0.0f,0.4f + l_pos.z ) * view );
+		wPipeline.effect.vs.BindProjection( proj );
+		wPipeline.effect.vs.SetLightPosition( l_pos * view );
+		wPipeline.Draw( ceiling );
 	}
 private:
 	IndexedTriangleList<Vertex> itlist;
 	IndexedTriangleList<SolidEffect::Vertex> lightIndicator = Sphere::GetPlain<SolidEffect::Vertex>( 0.05f );
+	IndexedTriangleList<VertexLightTexturedEffect::Vertex> ceiling = Plane::GetSkinnedNormals<VertexLightTexturedEffect::Vertex>( 20 );
 	std::shared_ptr<ZBuffer> pZb;
 	Pipeline pipeline;
 	LightIndicatorPipeline liPipeline;
+	WallPipeline wPipeline;
 	MouseTracker mt;
 	// fov
 	static constexpr float aspect_ratio = 1.33333f;

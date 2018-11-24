@@ -42,7 +42,7 @@ public:
 	typedef ::Pipeline<SpecularPhongPointEffect> Pipeline;
 	typedef ::Pipeline<SolidEffect> LightIndicatorPipeline;
 	typedef ::Pipeline<VertexLightTexturedEffect> WallPipeline;
-	typedef ::NormiePipe<RippleVertexSpecularPhongEffect> RipplePipeline;
+	typedef ::Pipeline<RippleVertexSpecularPhongEffect> RipplePipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
 	SpecularPhongPointScene( Graphics& gfx )

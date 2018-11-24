@@ -11,6 +11,7 @@
 #include "VertexLightTexturedEffect.h"
 #include "RippleVertexSpecularPhongEffect.h"
 #include "Plane.h"
+#include "NormiePipe.h"
 
 struct PointDiffuseParams
 {
@@ -41,7 +42,7 @@ public:
 	typedef ::Pipeline<SpecularPhongPointEffect> Pipeline;
 	typedef ::Pipeline<SolidEffect> LightIndicatorPipeline;
 	typedef ::Pipeline<VertexLightTexturedEffect> WallPipeline;
-	typedef ::Pipeline<RippleVertexSpecularPhongEffect> RipplePipeline;
+	typedef ::NormiePipe<RippleVertexSpecularPhongEffect> RipplePipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
 	SpecularPhongPointScene( Graphics& gfx )

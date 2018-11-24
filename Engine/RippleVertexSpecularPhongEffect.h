@@ -48,14 +48,16 @@ public:
 			n( src.n ),
 			worldPos( src.worldPos ),
 			pos( pos ),
-			t( src.t )
+			t( src.t ),
+			nend( src.nend )
 		{}
-		VSOutput( const Vec4& pos,const Vec3& n,const Vec3& worldPos,const Vec2& t )
+		VSOutput( const Vec4& pos,const Vec3& n,const Vec3& worldPos,const Vec2& t,const Vec4& nend )
 			:
 			n( n ),
 			pos( pos ),
 			worldPos( worldPos ),
-			t( t )
+			t( t ),
+			nend( nend )
 		{}
 		VSOutput& operator+=( const VSOutput& rhs )
 		{
@@ -63,6 +65,7 @@ public:
 			n += rhs.n;
 			worldPos += rhs.worldPos;
 			t += rhs.t;
+			nend += rhs.nend;
 			return *this;
 		}
 		VSOutput operator+( const VSOutput& rhs ) const
@@ -75,6 +78,7 @@ public:
 			n -= rhs.n;
 			worldPos -= rhs.worldPos;
 			t -= rhs.t;
+			nend -= rhs.nend;
 			return *this;
 		}
 		VSOutput operator-( const VSOutput& rhs ) const
@@ -87,6 +91,7 @@ public:
 			n *= rhs;
 			worldPos *= rhs;
 			t *= rhs;
+			nend *= rhs;
 			return *this;
 		}
 		VSOutput operator*( float rhs ) const
@@ -99,6 +104,7 @@ public:
 			n /= rhs;
 			worldPos /= rhs;
 			t /= rhs;
+			nend /= rhs;
 			return *this;
 		}
 		VSOutput operator/( float rhs ) const
@@ -110,6 +116,7 @@ public:
 		Vec3 n;
 		Vec3 worldPos;
 		Vec2 t;
+		Vec4 nend;
 	};
 	class VertexShader : public BaseVertexShader<VSOutput>
 	{
@@ -133,8 +140,9 @@ public:
 				0.0f
 			};
 			n.Normalize();
+			const auto nend = pos + n * 0.02f;
 
-			return { pos * worldViewProj,n * worldView,pos * worldView,v.t };
+			return { pos * worldViewProj,n * worldView,pos * worldView,v.t,nend * worldViewProj };
 		}
 	private:
 		static constexpr float wavelength = PI;

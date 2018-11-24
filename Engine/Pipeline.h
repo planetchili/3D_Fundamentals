@@ -32,7 +32,7 @@ public:
 	{
 		assert( pZb->GetHeight() == gfx.ScreenHeight && pZb->GetWidth() == gfx.ScreenWidth );
 	}
-	void Draw( IndexedTriangleList<Vertex>& triList )
+	void Draw( const IndexedTriangleList<Vertex>& triList )
 	{
 		ProcessVertices( triList.vertices,triList.indices );
 	}

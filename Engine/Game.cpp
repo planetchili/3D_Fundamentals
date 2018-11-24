@@ -42,25 +42,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	scenes.push_back( std::make_unique<SpecularPhongPointScene>( gfx,TestTriangle::GetNormals<SpecularPhongPointScene::Vertex>() ) );
-	scenes.push_back( std::make_unique<SpecularPhongPointScene>( gfx,IndexedTriangleList<SpecularPhongPointScene::Vertex>::LoadNormals( "models\\suzanne.obj" ) ) );
-	//scenes.push_back( std::make_unique<PhongPointScene>( gfx,IndexedTriangleList<PhongPointScene::Vertex>::LoadNormals( "models\\suzanne.obj" ) ) );
-	//scenes.push_back( std::make_unique<PhongPointScene>( gfx,Plane::GetNormals<PhongPointScene::Vertex>( 16 ) ) );
-	//scenes.push_back( std::make_unique<GouraudPointScene>( gfx,Plane::GetNormals<GouraudPointScene::Vertex>( 16 ) ) );
-	//scenes.push_back( std::make_unique<GouraudPointScene>( gfx,IndexedTriangleList<GouraudPointScene::Vertex>::LoadNormals( "models\\suzanne.obj" ) ) );
-	//scenes.push_back( std::make_unique<GouraudScene>( gfx,IndexedTriangleList<GouraudScene::Vertex>::LoadNormals( "models\\suzanne.obj" ) ) );
-	//scenes.push_back( std::make_unique<GouraudScene>( gfx,Sphere::GetPlainNormals<GouraudScene::Vertex>() ) );
-	//scenes.push_back( std::make_unique<GeometryFlatScene>( gfx,Sphere::GetPlain<GeometryFlatScene::Vertex>() ) );
-	//scenes.push_back( std::make_unique<VertexWaveScene>( gfx ) );
-	//scenes.push_back( std::make_unique<GeometryFlatScene>( gfx,IndexedTriangleList<GeometryFlatScene::Vertex>::Load( "models\\bunny.obj" ) ) );
-	//scenes.push_back( std::make_unique<GeometryFlatScene>( gfx,Cube::GetPlain<GeometryFlatScene::Vertex>() ) );
-	//scenes.push_back( std::make_unique<CubeFlatIndependentScene>( gfx ) );
-	//scenes.push_back( std::make_unique<CubeSolidGeometryScene>( gfx ) );
-	//scenes.push_back( std::make_unique<CubeVertexPositionColorScene>( gfx ) );
-	//scenes.push_back( std::make_unique<DoubleCubeScene>( gfx ) );
-	//scenes.push_back( std::make_unique<CubeSkinScene>( gfx,L"images\\office_skin.jpg" ) );
-	//scenes.push_back( std::make_unique<CubeVertexColorScene>( gfx ) );
-	//scenes.push_back( std::make_unique<CubeSolidScene>( gfx ) );
+	scenes.push_back( std::make_unique<SpecularPhongPointScene>( gfx ) );
 	curScene = scenes.begin();
 	OutputSceneName();
 }

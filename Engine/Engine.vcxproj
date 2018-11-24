@@ -180,6 +180,7 @@
     <ClInclude Include="NDCScreenTransformer.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RippleVertexSpecularPhongEffect.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SolidEffect.h" />
     <ClInclude Include="SolidGeometryEffect.h" />

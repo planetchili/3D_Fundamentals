@@ -6,6 +6,7 @@
 #include "BasePhongShader.h"
 
 // flat shading with vertex normals
+template<class Diffuse,class Specular>
 class SpecularPhongPointEffect
 {
 public:
@@ -106,19 +107,19 @@ public:
 	class VertexShader : public BaseVertexShader<VSOutput>
 	{
 	public:
-		Output operator()( const Vertex& v ) const
+		typename BaseVertexShader::Output operator()( const Vertex& v ) const
 		{
 			const auto p4 = Vec4( v.pos );
 			return { p4 * worldViewProj,Vec4{ v.n,0.0f } * worldView,p4 * worldView };
 		}
 	};
 	// default gs passes vertices through and outputs triangle
-	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
+	typedef DefaultGeometryShader<typename VertexShader::Output> GeometryShader;
 	// invoked for each pixel of a triangle
 	// takes an input of attributes that are the
 	// result of interpolating vertex attributes
 	// and outputs a color
-	class PixelShader : public BasePhongShader<>
+	class PixelShader : public BasePhongShader<Diffuse,Specular>
 	{
 	public:
 		template<class Input>

@@ -5,10 +5,9 @@
 #include "DefaultGeometryShader.h"
 #include "BasePhongShader.h"
 
-
 // flat shading with vertex normals
-template<class Diffuse>
-class VertexLightTexturedEffect
+template<class Diffuse,class Specular>
+class RippleVertexSpecularPhongEffect
 {
 public:
 	// the vertex type that will be input into the pipeline
@@ -16,27 +15,26 @@ public:
 	{
 	public:
 		Vertex() = default;
-		Vertex( const Vec4& pos )
+		Vertex( const Vec3& pos )
 			:
 			pos( pos )
 		{}
-		Vertex( const Vec4& pos,const Vertex& src )
+		Vertex( const Vec3& pos,const Vertex& src )
 			:
-			n( src.n ),
+			t( src.t ),
 			pos( pos )
 		{}
-		Vertex( const Vec4& pos,const Vec3& n )
+		Vertex( const Vec3& pos,const Vec2& t )
 			:
-			n( n ),
+			t( t ),
 			pos( pos )
 		{}
 	public:
-		Vec4 pos;
-		Vec3 n;
+		Vec3 pos;
 		Vec2 t;
 	};
 	// vertex shader
-	// output interpolates position, light, and tex coord
+	// output interpolates position, normal, world position
 	class VSOutput
 	{
 	public:
@@ -47,21 +45,24 @@ public:
 		{}
 		VSOutput( const Vec4& pos,const VSOutput& src )
 			:
-			t( src.t ),
-			l( src.l ),
-			pos( pos )
-		{}
-		VSOutput( const Vec4& pos,const Vec2& t,const Vec3& l )
-			:
-			t( t ),
+			n( src.n ),
+			worldPos( src.worldPos ),
 			pos( pos ),
-			l( l )
+			t( src.t )
+		{}
+		VSOutput( const Vec4& pos,const Vec3& n,const Vec3& worldPos,const Vec2& t )
+			:
+			n( n ),
+			pos( pos ),
+			worldPos( worldPos ),
+			t( t )
 		{}
 		VSOutput& operator+=( const VSOutput& rhs )
 		{
 			pos += rhs.pos;
+			n += rhs.n;
+			worldPos += rhs.worldPos;
 			t += rhs.t;
-			l += rhs.l;
 			return *this;
 		}
 		VSOutput operator+( const VSOutput& rhs ) const
@@ -71,8 +72,9 @@ public:
 		VSOutput& operator-=( const VSOutput& rhs )
 		{
 			pos -= rhs.pos;
+			n -= rhs.n;
+			worldPos -= rhs.worldPos;
 			t -= rhs.t;
-			l -= rhs.l;
 			return *this;
 		}
 		VSOutput operator-( const VSOutput& rhs ) const
@@ -82,8 +84,9 @@ public:
 		VSOutput& operator*=( float rhs )
 		{
 			pos *= rhs;
+			n *= rhs;
+			worldPos *= rhs;
 			t *= rhs;
-			l *= rhs;
 			return *this;
 		}
 		VSOutput operator*( float rhs ) const
@@ -93,8 +96,9 @@ public:
 		VSOutput& operator/=( float rhs )
 		{
 			pos /= rhs;
+			n /= rhs;
+			worldPos /= rhs;
 			t /= rhs;
-			l /= rhs;
 			return *this;
 		}
 		VSOutput operator/( float rhs ) const
@@ -103,47 +107,40 @@ public:
 		}
 	public:
 		Vec4 pos;
+		Vec3 n;
+		Vec3 worldPos;
 		Vec2 t;
-		Vec3 l;
 	};
 	class VertexShader : public BaseVertexShader<VSOutput>
 	{
 	public:
-		using Output = VSOutput;
-	public:
-		Output operator()( const Vertex& v ) const
+		void SetTime( float time )
 		{
-			// transform mech vertex position before lighting calc
-			const auto worldPos = v.pos * worldView;
-			// vertex to light data
-			const auto v_to_l = light_pos - worldPos;
-			const auto dist = v_to_l.Len();
-			const Vec3 dir = v_to_l / dist;
-			// calculate attenuation
-			const auto attenuation = 1.0f /
-				(Diffuse::constant_attenuation + Diffuse::linear_attenuation * dist * Diffuse::quadradic_attenuation * sq( dist ));
-			// calculate intensity based on angle of incidence and attenuation
-			const auto d = light_diffuse * attenuation * std::max( 0.0f,static_cast<Vec3&>( Vec4( v.n,0.0f ) * worldView ) * dir );
-			// add diffuse+ambient, filter by material color, saturate and scale
-			const auto l = d + light_ambient;
-			return{ v.pos * worldViewProj,v.t,l };
+			t = time;
 		}
-		void SetDiffuseLight( const Vec3& c )
+		typename BaseVertexShader::Output operator()( const Vertex& v ) const
 		{
-			light_diffuse = c;
-		}
-		void SetAmbientLight( const Vec3& c )
-		{
-			light_ambient = c;
-		}
-		void SetLightPosition( const Vec4& pos_in )
-		{
-			light_pos = pos_in;
+			// calculate some triggy bois
+			const auto cosx = std::cos( wrap_angle( v.pos.x * freq + t * wavelength ) );
+			// sine wave amplitude from position w/ time variant phase animation
+			const auto dz = amplitude * cosx;
+			const auto pos = Vec4{ v.pos.x,v.pos.y,v.pos.z + dz,1.0f };
+			// normal derived base on cross product of partial dx x dy
+			auto n = Vec4{
+				freq * amplitude * cosx,
+				0.0f,
+				1.0f,
+				0.0f
+			};
+			n.Normalize();
+
+			return { pos * worldViewProj,n * worldView,pos * worldView,v.t };
 		}
 	private:
-		Vec3 light_diffuse;
-		Vec3 light_ambient;
-		Vec4 light_pos;
+		static constexpr float wavelength = PI;
+		static constexpr float freq = 45.0f;
+		static constexpr float amplitude = 0.02f;
+		float t = 0.0f;
 	};
 	// default gs passes vertices through and outputs triangle
 	typedef DefaultGeometryShader<typename VertexShader::Output> GeometryShader;
@@ -151,17 +148,17 @@ public:
 	// takes an input of attributes that are the
 	// result of interpolating vertex attributes
 	// and outputs a color
-	class PixelShader
+	class PixelShader : public BasePhongShader<Diffuse,Specular>
 	{
 	public:
 		template<class Input>
 		Color operator()( const Input& in ) const
 		{
 			const auto material_color = Vec3( pTex->GetPixel(
-				unsigned int( in.t.x * tex_width  + 0.5f ) % tex_width,
+				unsigned int( in.t.x * tex_width + 0.5f ) % tex_width,
 				unsigned int( in.t.y * tex_height + 0.5f ) % tex_width
 			) ) / 255.0f;
-			return Color( material_color.GetHadamard( in.l ).GetSaturated() * 255.0f );
+			return Shade( in,material_color );
 		}
 		void BindTexture( const Surface& tex )
 		{

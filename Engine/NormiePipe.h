@@ -59,13 +59,13 @@ private:
 			auto v0 = v;
 			decltype(v0) v1;
 			v1.pos = v.nend;
-			if( v1.pos.z < 0.1f || v0.pos.z < 0.1f )
+			if( v1.pos.z < 0.01f || v0.pos.z < 0.01f )
 			{
 				continue;
 			}
 			pst.Transform( v0 );
 			pst.Transform( v1 );
-			gfx.DrawLineDepth( *pZb,v0.pos,v1.pos,Colors::Red );
+			gfx.DrawLineDepth( *pZb,v0.pos,v1.pos,Colors::Cyan );
 		}
 
 		// assemble triangles from stream of indices and vertices

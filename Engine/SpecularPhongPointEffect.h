@@ -107,10 +107,10 @@ public:
 	class VertexShader : public BaseVertexShader<VSOutput>
 	{
 	public:
-		typename BaseVertexShader::Output operator()( const Vertex& v ) const
+		typename BaseVertexShader<VSOutput>::Output operator()( const Vertex& v ) const
 		{
 			const auto p4 = Vec4( v.pos );
-			return { p4 * worldViewProj,Vec4{ v.n,0.0f } * worldView,p4 * worldView };
+			return { p4 * this->worldViewProj,Vec4{ v.n,0.0f } *this->worldView,p4 * this->worldView };
 		}
 	};
 	// default gs passes vertices through and outputs triangle
@@ -125,7 +125,7 @@ public:
 		template<class Input>
 		Color operator()( const Input& in ) const
 		{
-			return Shade( in,material_color );
+			return this->Shade( in,material_color );
 		}
 	private:
 		Vec3 material_color = { 0.8f,0.85f,1.0f };

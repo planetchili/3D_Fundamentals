@@ -6,6 +6,7 @@
 #include "Miniball.h"
 #include <fstream>
 #include <cctype>
+#include <algorithm>
 
 template<class T>
 class IndexedTriangleList
@@ -30,7 +31,7 @@ public:
 			std::ifstream file( filename );
 			std::string firstline;
 			std::getline( file,firstline );
-			std::transform( firstline.begin(),firstline.end(),firstline.begin(),std::tolower );
+			std::transform(firstline.begin(), firstline.end(), firstline.begin(), [](char c) { return static_cast<char>(std::tolower(c)); });
 			if( firstline.find( "ccw" ) != std::string::npos )
 			{
 				isCCW = true;
@@ -120,7 +121,7 @@ public:
 			std::ifstream file( filename );
 			std::string firstline;
 			std::getline( file,firstline );
-			std::transform( firstline.begin(),firstline.end(),firstline.begin(),std::tolower );
+			std::transform( firstline.begin(),firstline.end(),firstline.begin(), [](char c) { return static_cast<char>(std::tolower(c)); });
 			if( firstline.find( "ccw" ) != std::string::npos )
 			{
 				isCCW = true;

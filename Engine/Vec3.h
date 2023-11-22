@@ -31,13 +31,13 @@ public:
 	_Vec3() = default;
 	_Vec3( T x,T y,T z )
 		:
-		_Vec2( x,y ),
+		_Vec2<T>( x, y ),
 		z( z )
 	{}
 	template <typename T2>
 	explicit operator _Vec3<T2>() const
 	{
-		return{ (T2)x,(T2)y,(T2)z };
+		return{ (T2)this->x,(T2)this->y,(T2)z };
 	}
 	T		LenSq() const
 	{
@@ -45,13 +45,13 @@ public:
 	}
 	T		Len() const
 	{
-		return sqrt( LenSq() );
+		return static_cast<T>(sqrt( LenSq() ));
 	}
 	_Vec3&	Normalize()
 	{
 		const T length = Len();
-		x /= length;
-		y /= length;
+		this->x /= length;
+		this->y /= length;
 		z /= length;
 		return *this;
 	}
@@ -63,32 +63,32 @@ public:
 	}
 	_Vec3	operator-() const
 	{
-		return _Vec3( -x,-y,-z );
+		return _Vec3( -this->x,-this->y,-z );
 	}
 	_Vec3&	operator=( const _Vec3 &rhs )
 	{
-		x = rhs.x;
-		y = rhs.y;
+		this->x = rhs.x;
+		this->y = rhs.y;
 		z = rhs.z;
 		return *this;
 	}
 	_Vec3&	operator+=( const _Vec3 &rhs )
 	{
-		x += rhs.x;
-		y += rhs.y;
+		this->x += rhs.x;
+		this->y += rhs.y;
 		z += rhs.z;
 		return *this;
 	}
 	_Vec3&	operator-=( const _Vec3 &rhs )
 	{
-		x -= rhs.x;
-		y -= rhs.y;
+		this->x -= rhs.x;
+		this->y -= rhs.y;
 		z -= rhs.z;
 		return *this;
 	}
 	T		operator*( const _Vec3 &rhs ) const
 	{
-		return x * rhs.x + y * rhs.y + z * rhs.z;
+		return this->x * rhs.x + this->y * rhs.y + z * rhs.z;
 	}
 	_Vec3	operator+( const _Vec3 &rhs ) const
 	{
@@ -100,8 +100,8 @@ public:
 	}
 	_Vec3&	operator*=( const T &rhs )
 	{
-		x *= rhs;
-		y *= rhs;
+		this->x *= rhs;
+		this->y *= rhs;
 		z *= rhs;
 		return *this;
 	}
@@ -112,14 +112,14 @@ public:
 	_Vec3	operator%( const _Vec3& rhs ) const
 	{
 		return _Vec3(
-			y * rhs.z - z * rhs.y,
-			z * rhs.x - x * rhs.z,
-			x * rhs.y - y * rhs.x );
+			this->y * rhs.z - z * rhs.y,
+			z * rhs.x - this->x * rhs.z,
+			this->x * rhs.y - this->y * rhs.x );
 	}
 	_Vec3&	operator/=( const T &rhs )
 	{
-		x /= rhs;
-		y /= rhs;
+		this->x /= rhs;
+		this->y /= rhs;
 		z /= rhs;
 		return *this;
 	}
@@ -129,7 +129,7 @@ public:
 	}
 	bool	operator==( const _Vec3 &rhs ) const
 	{
-		return x == rhs.x && y == rhs.y && rhs.z == z;
+		return this->x == rhs.x && this->y == rhs.y && rhs.z == z;
 	}
 	bool	operator!=( const _Vec3 &rhs ) const
 	{
@@ -138,8 +138,8 @@ public:
 	// clamp to between 0.0 ~ 1.0
 	_Vec3&	Saturate()
 	{
-		x = std::min( 1.0f,std::max( 0.0f,x ) );
-		y = std::min( 1.0f,std::max( 0.0f,y ) );
+		this->x = std::min( 1.0f,std::max( 0.0f, this->x ) );
+		this->y = std::min( 1.0f,std::max( 0.0f, this->y ) );
 		z = std::min( 1.0f,std::max( 0.0f,z ) );
 		return *this;
 	}
@@ -153,8 +153,8 @@ public:
 	// x3 = x1 * x2 etc.
 	_Vec3&  Hadamard( const _Vec3& rhs )
 	{
-		x *= rhs.x;
-		y *= rhs.y;
+		this->x *= rhs.x;
+		this->y *= rhs.y;
 		z *= rhs.z;
 		return *this;
 	}

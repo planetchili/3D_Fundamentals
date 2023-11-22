@@ -34,7 +34,7 @@ constexpr auto sq( const T& x )
 template<typename T>
 T wrap_angle( T theta )
 {
-	const T modded = fmod( theta,(T)2.0 * (T)PI_D );
+	const T modded = static_cast<T>(fmod( theta,(T)2.0 * (T)PI_D ));
 	return (modded > (T)PI_D) ?
 		(modded - (T)2.0 * (T)PI_D) :
 		modded;

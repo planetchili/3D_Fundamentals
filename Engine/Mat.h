@@ -102,7 +102,7 @@ public:
 		}
 		else
 		{
-			static_assert(false,"Bad dimensionality");
+			static_assert(S == 3 || S == 4, "Bad dimensionality");
 		}
 	}
 	constexpr static _Mat Scaling( T factor )
@@ -126,7 +126,7 @@ public:
 		}
 		else
 		{
-			static_assert(false,"Bad dimensionality");
+			static_assert(S == 3 || S == 4, "Bad dimensionality");
 		}
 
 	}
@@ -153,7 +153,7 @@ public:
 		}
 		else
 		{
-			static_assert(false,"Bad dimensionality");
+			static_assert(S == 3 || S == 4, "Bad dimensionality");
 		}
 	}
 	static _Mat RotationY( T theta )
@@ -179,7 +179,7 @@ public:
 		}
 		else
 		{
-			static_assert(false,"Bad dimensionality");
+			static_assert(S == 3 || S == 4, "Bad dimensionality");
 		}
 	}
 	static _Mat RotationX( T theta )
@@ -205,7 +205,7 @@ public:
 		}
 		else
 		{
-			static_assert(false,"Bad dimensionality");
+			static_assert(S == 3 || S == 4, "Bad dimensionality");
 		}
 	}
 	template<class V>
@@ -226,7 +226,7 @@ public:
 		}
 		else
 		{
-			static_assert(false,"Bad dimensionality");
+			static_assert(S == 3 || S == 4, "Bad dimensionality");
 		}
 	}
 	constexpr static _Mat Projection( T w,T h,T n,T f )
@@ -242,7 +242,7 @@ public:
 		}
 		else
 		{
-			static_assert(false,"Bad dimensionality");
+			static_assert(S == 3 || S == 4, "Bad dimensionality");
 		}
 	}
 	constexpr static _Mat ProjectionHFOV( T fov,T ar,T n,T f )
@@ -261,7 +261,7 @@ public:
 		}
 		else
 		{
-			static_assert(false,"Bad dimensionality");
+			static_assert(S == 3 || S == 4, "Bad dimensionality");
 		}
 	}
 public:

@@ -114,7 +114,7 @@ public:
 		Output operator()( const Vertex& v ) const
 		{
 			// transform mech vertex position before lighting calc
-			const auto worldPos = v.pos * worldView;
+			const auto worldPos = v.pos * this->worldView;
 			// vertex to light data
 			const auto v_to_l = light_pos - worldPos;
 			const auto dist = v_to_l.Len();
@@ -123,10 +123,10 @@ public:
 			const auto attenuation = 1.0f /
 				(Diffuse::constant_attenuation + Diffuse::linear_attenuation * dist * Diffuse::quadradic_attenuation * sq( dist ));
 			// calculate intensity based on angle of incidence and attenuation
-			const auto d = light_diffuse * attenuation * std::max( 0.0f,static_cast<Vec3&>( Vec4( v.n,0.0f ) * worldView ) * dir );
+			const auto d = light_diffuse * attenuation * std::max( 0.0f,static_cast<Vec3>( Vec4( v.n,0.0f ) * this->worldView ) * dir );
 			// add diffuse+ambient, filter by material color, saturate and scale
 			const auto l = d + light_ambient;
-			return{ v.pos * worldViewProj,v.t,l };
+			return{ v.pos * this->worldViewProj,v.t,l };
 		}
 		void SetDiffuseLight( const Vec3& c )
 		{
@@ -158,8 +158,8 @@ public:
 		Color operator()( const Input& in ) const
 		{
 			const auto material_color = Vec3( pTex->GetPixel(
-				unsigned int( in.t.x * tex_width  + 0.5f ) % tex_width,
-				unsigned int( in.t.y * tex_height + 0.5f ) % tex_width
+				static_cast<unsigned int>( in.t.x * tex_width  + 0.5f ) % tex_width,
+				static_cast<unsigned int>( in.t.y * tex_height + 0.5f ) % tex_width
 			) ) / 255.0f;
 			return Color( material_color.GetHadamard( in.l ).GetSaturated() * 255.0f );
 		}

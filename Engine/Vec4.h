@@ -31,18 +31,18 @@ public:
 	_Vec4() = default;
 	_Vec4( T x,T y,T z,T w )
 		:
-		_Vec3( x,y,z ),
+		_Vec3<T>( x,y,z ),
 		w( w )
 	{}
-	_Vec4( const _Vec3& v3,float w = 1.0f  )
+	_Vec4( const _Vec3<T>& v3,float w = 1.0f  )
 		:
-		_Vec3( v3 ),
+		_Vec3<T>( v3 ),
 		w( w )
 	{}
 	template <typename T2>
 	explicit operator _Vec4<T2>() const
 	{
-		return{ (T2)x,(T2)y,(T2)z,(T2)w };
+		return{ (T2)this->x,(T2)this->y,(T2)this->z,(T2)w };
 	}
 	//T		LenSq() const
 	//{
@@ -68,29 +68,29 @@ public:
 	//}
 	_Vec4	operator-() const
 	{
-		return _Vec4( -x,-y,-z,-w );
+		return _Vec4( -this->x,-this->y,-this->z,-w );
 	}
 	_Vec4&	operator=( const _Vec4 &rhs )
 	{
-		x = rhs.x;
-		y = rhs.y;
-		z = rhs.z;
+		this->x = rhs.x;
+		this->y = rhs.y;
+		this->z = rhs.z;
 		w = rhs.w;
 		return *this;
 	}
 	_Vec4&	operator+=( const _Vec4 &rhs )
 	{
-		x += rhs.x;
-		y += rhs.y;
-		z += rhs.z;
+		this->x += rhs.x;
+		this->y += rhs.y;
+		this->z += rhs.z;
 		w += rhs.w;
 		return *this;
 	}
 	_Vec4&	operator-=( const _Vec4 &rhs )
 	{
-		x -= rhs.x;
-		y -= rhs.y;
-		z -= rhs.z;
+		this->x -= rhs.x;
+		this->y -= rhs.y;
+		this->z -= rhs.z;
 		w -= rhs.w;
 		return *this;
 	}
@@ -108,9 +108,9 @@ public:
 	}
 	_Vec4&	operator*=( const T &rhs )
 	{
-		x *= rhs;
-		y *= rhs;
-		z *= rhs;
+		this->x *= rhs;
+		this->y *= rhs;
+		this->z *= rhs;
 		w *= rhs;
 		return *this;
 	}
@@ -127,9 +127,9 @@ public:
 	//}
 	_Vec4&	operator/=( const T &rhs )
 	{
-		x /= rhs;
-		y /= rhs;
-		z /= rhs;
+		this->x /= rhs;
+		this->y /= rhs;
+		this->z /= rhs;
 		w /= rhs;
 		return *this;
 	}
@@ -139,7 +139,7 @@ public:
 	}
 	bool	operator==( const _Vec4 &rhs ) const
 	{
-		return x == rhs.x && y == rhs.y && rhs.z == z && rhs.w == w;
+		return this->x == rhs.x && this->y == rhs.y && rhs.z == this->z && rhs.w == w;
 	}
 	bool	operator!=( const _Vec4 &rhs ) const
 	{
@@ -148,9 +148,9 @@ public:
 	// clamp to between 0.0 ~ 1.0
 	_Vec4&	Saturate()
 	{
-		x = std::min( 1.0f,std::max( 0.0f,x ) );
-		y = std::min( 1.0f,std::max( 0.0f,y ) );
-		z = std::min( 1.0f,std::max( 0.0f,z ) );
+		this->x = std::min( 1.0f,std::max( 0.0f, this->x ) );
+		this->y = std::min( 1.0f,std::max( 0.0f, this->y ) );
+		this->z = std::min( 1.0f,std::max( 0.0f, this->z ) );
 		w = std::min( 1.0f,std::max( 0.0f,w ) );
 		return *this;
 	}
@@ -164,9 +164,9 @@ public:
 	// x3 = x1 * x2 etc.
 	_Vec4&  Hadamard( const _Vec4& rhs )
 	{
-		x *= rhs.x;
-		y *= rhs.y;
-		z *= rhs.z;
+		this->x *= rhs.x;
+		this->y *= rhs.y;
+		this->z *= rhs.z;
 		w *= rhs.w;
 		return *this;
 	}

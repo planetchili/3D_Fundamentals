@@ -86,7 +86,8 @@ private:
 	{
 		// generate triangle from 3 vertices using gs
 		// and send to clipper
-		ClipCullTriangle( effect.gs( v0,v1,v2,triangle_index ) );
+		auto e = effect.gs(v0, v1, v2, triangle_index);
+		ClipCullTriangle( e );
 	}
 
 	void ClipCullTriangle( Triangle<GSOut>& t )
@@ -139,8 +140,14 @@ private:
 			const auto v0a = interpolate( v0,v1,alphaA );
 			const auto v0b = interpolate( v0,v2,alphaB );
 			// draw triangles
-			PostProcessTriangleVertices( Triangle<GSOut>{ v0a,v1,v2 } );
-			PostProcessTriangleVertices( Triangle<GSOut>{ v0b,v0a,v2 } );
+			{
+				auto t1 = Triangle<GSOut>{ v0a,v1,v2 };
+				PostProcessTriangleVertices( t1 );
+			}
+			{
+				auto t1 = Triangle<GSOut>{ v0b,v0a,v2 };
+				PostProcessTriangleVertices( t1 );
+			}
 		};
 		const auto Clip2 = [this]( GSOut& v0,GSOut& v1,GSOut& v2 )
 		{
@@ -151,7 +158,10 @@ private:
 			v0 = interpolate( v0,v2,alpha0 );
 			v1 = interpolate( v1,v2,alpha1 );
 			// draw triangles
-			PostProcessTriangleVertices( Triangle<GSOut>{ v0,v1,v2 } );
+			{
+				auto t1 = Triangle<GSOut>{ v0,v1,v2 };
+				PostProcessTriangleVertices( t1 );
+			}
 		};
 
 		// near clipping tests

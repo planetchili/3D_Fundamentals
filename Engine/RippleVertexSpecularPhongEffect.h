@@ -118,7 +118,7 @@ public:
 		{
 			t = time;
 		}
-		typename BaseVertexShader::Output operator()( const Vertex& v ) const
+		typename BaseVertexShader<VSOutput>::Output operator()( const Vertex& v ) const
 		{
 			// calculate some triggy bois
 			const auto angle = wrap_angle( v.pos.x * freq + t * wavelength );
@@ -136,7 +136,7 @@ public:
 			};
 			n.Normalize();
 
-			return { pos * worldViewProj,n * worldView,pos * worldView,v.t };
+			return { pos * this->worldViewProj,n * this->worldView,pos * this->worldView,v.t };
 		}
 	private:
 		static constexpr float wavelength = PI;
@@ -157,10 +157,10 @@ public:
 		Color operator()( const Input& in ) const
 		{
 			const auto material_color = Vec3( pTex->GetPixel(
-				unsigned int( in.t.x * tex_width + 0.5f ) % tex_width,
-				unsigned int( in.t.y * tex_height + 0.5f ) % tex_width
+				static_cast<unsigned int>( in.t.x * tex_width + 0.5f ) % tex_width,
+				static_cast<unsigned int>( in.t.y * tex_height + 0.5f ) % tex_width
 			) ) / 255.0f;
-			return Shade( in,material_color );
+			return this->Shade( in,material_color );
 		}
 		void BindTexture( const Surface& tex )
 		{
